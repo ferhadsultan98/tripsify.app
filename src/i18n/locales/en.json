@@ -1,0 +1,49 @@
+{
+  "login_screen": {
+    "title": "Tripsify Driver",
+    "subtitle": "Drive with Tripsify.\nEarn extra money while you travel.",
+    "login_btn": "Log In",
+    "signup_btn": "Sign up",
+    "privacy_policy": "Privacy Policy",
+    "terms_of_service": "Terms of Service"
+  },
+  "appearance_screen": {
+    "title": "App Appearance",
+    "theme": "Theme",
+    "language": "App Language",
+    "choose_theme": "Choose Theme",
+    "choose_language": "Choose Language",
+    "system_default": "System Default",
+    "light": "Light",
+    "dark": "Dark",
+    "cancel": "Cancel",
+    "ok": "OK"
+  },
+   "splash_screen": {
+    "title": "Discover. Drive. Earn.",
+    "subtitle": "Make your journey matter with Tripsify!"
+  },
+    "terms_screen": {
+    "title": "Terms of Service",
+    "last_updated": "Last Updated: December 08, 2023",
+    "sections": {
+      "1": { "title": "1. Acceptance of Terms", "body": "By using Tripsify, you agree to these Terms of Service. If you do not agree, please do not use our platform." },
+      "2": { 
+        "title": "2. User Conduct", 
+        "body": "You agree not to:", 
+        "bullets": [
+            "Violate any laws or regulations.",
+            "Use our platform for any unlawful or unauthorized purpose.",
+            "Transmit any viruses, malware, or harmful code.",
+            "Attempt to gain unauthorized access to our systems."
+        ]
+      },
+      "3": { "title": "3. User Content", "body": "You retain ownership of your user-generated content. By uploading content, you grant Tripsify a non-exclusive, worldwide, royalty-free license to use, store, and display your content for platform purposes." },
+      "4": { "title": "4. Privacy", "body": "Our Privacy Policy explains how we collect, use, and protect your information. By using Tripsify, you agree to our data practices as outlined in the Privacy Policy." },
+      "5": { "title": "5. Termination", "body": "We reserve the right to suspend or terminate your account at any time for violations of these Terms or for any other reason at our discretion." },
+      "6": { "title": "6. Limitation of Liability", "body": "Tripsify is provided \"as is\" without warranties of any kind. We are not liable for any damages arising from your use of the platform." },
+      "7": { "title": "7. Changes to Terms", "body": "We may update these Terms from time to time. Continued use of the platform after changes constitutes acceptance of the new Terms." },
+      "8": { "title": "8. Contact Us", "body": "If you have any questions about these Terms, please contact us at support@tripsify.com." }
+    }
+  }
+}

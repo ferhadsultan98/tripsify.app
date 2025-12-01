@@ -11,6 +11,20 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		1B695A7BECE346C0BB2F2275 /* Uni Sans Bold Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 45FED45A5423404991BB580B /* Uni Sans Bold Italic.otf */; };
+		0F95C53AE1814B0FAC1E9EA8 /* Uni Sans Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7BDCAA30AA2B4E68AA61E4D8 /* Uni Sans Bold.otf */; };
+		2398BD2F08BD48CC8211AB37 /* Uni Sans Book Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = F82FF6B26723428D8953E0AE /* Uni Sans Book Italic.otf */; };
+		A0F119D284C1471899FBC0D5 /* Uni Sans Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = DABCC2CA340E4ADFA509232C /* Uni Sans Book.otf */; };
+		61901C1F6AEB4A85B67ECB4C /* Uni Sans Heavy Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5D9A94F1E0B94BBDAC2D157A /* Uni Sans Heavy Italic.otf */; };
+		430749893B39459AB949963A /* Uni Sans Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3B0F04AD486740DB838DCD51 /* Uni Sans Heavy.otf */; };
+		5337C34D55D344829DE53025 /* Uni Sans Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = BBDDA99D594844A4953CFF60 /* Uni Sans Italic.otf */; };
+		76DDF8DCEF9345F5A06A0A92 /* Uni Sans Light Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 859ACCD5844C47EAA9643197 /* Uni Sans Light Italic.otf */; };
+		0103A7BC00D342AB9BBB9E02 /* Uni Sans Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = F90A586243D64E42B8FF8FF9 /* Uni Sans Light.otf */; };
+		4C5FEB61193B4D578B8488D7 /* Uni Sans Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 02805E0569C144F0A10B1B54 /* Uni Sans Regular.otf */; };
+		A4FC82DADB0641569E5C9FF0 /* Uni Sans SemiBold Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6F49BDA03804915B32F8AF2 /* Uni Sans SemiBold Italic.otf */; };
+		B33CE7E6D25A4A98BFC2D1F9 /* Uni Sans SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 7730C8A287844680B25E02BA /* Uni Sans SemiBold.otf */; };
+		DDA69E46E16144CAB1AB7FD0 /* Uni Sans Thin Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6F14E9DE33664AF6A2579F78 /* Uni Sans Thin Italic.otf */; };
+		D35C26A717C540CFA726BE89 /* Uni Sans Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = A40C641F9A5A46068687AF0B /* Uni Sans Thin.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +38,20 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = TripsifyApp/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = TripsifyApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		45FED45A5423404991BB580B /* Uni Sans Bold Italic.otf */ = {isa = PBXFileReference; name = "Uni Sans Bold Italic.otf"; path = "../assets/fonts/UniSans/Uni Sans Bold Italic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7BDCAA30AA2B4E68AA61E4D8 /* Uni Sans Bold.otf */ = {isa = PBXFileReference; name = "Uni Sans Bold.otf"; path = "../assets/fonts/UniSans/Uni Sans Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F82FF6B26723428D8953E0AE /* Uni Sans Book Italic.otf */ = {isa = PBXFileReference; name = "Uni Sans Book Italic.otf"; path = "../assets/fonts/UniSans/Uni Sans Book Italic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		DABCC2CA340E4ADFA509232C /* Uni Sans Book.otf */ = {isa = PBXFileReference; name = "Uni Sans Book.otf"; path = "../assets/fonts/UniSans/Uni Sans Book.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5D9A94F1E0B94BBDAC2D157A /* Uni Sans Heavy Italic.otf */ = {isa = PBXFileReference; name = "Uni Sans Heavy Italic.otf"; path = "../assets/fonts/UniSans/Uni Sans Heavy Italic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3B0F04AD486740DB838DCD51 /* Uni Sans Heavy.otf */ = {isa = PBXFileReference; name = "Uni Sans Heavy.otf"; path = "../assets/fonts/UniSans/Uni Sans Heavy.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BBDDA99D594844A4953CFF60 /* Uni Sans Italic.otf */ = {isa = PBXFileReference; name = "Uni Sans Italic.otf"; path = "../assets/fonts/UniSans/Uni Sans Italic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		859ACCD5844C47EAA9643197 /* Uni Sans Light Italic.otf */ = {isa = PBXFileReference; name = "Uni Sans Light Italic.otf"; path = "../assets/fonts/UniSans/Uni Sans Light Italic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F90A586243D64E42B8FF8FF9 /* Uni Sans Light.otf */ = {isa = PBXFileReference; name = "Uni Sans Light.otf"; path = "../assets/fonts/UniSans/Uni Sans Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		02805E0569C144F0A10B1B54 /* Uni Sans Regular.otf */ = {isa = PBXFileReference; name = "Uni Sans Regular.otf"; path = "../assets/fonts/UniSans/Uni Sans Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D6F49BDA03804915B32F8AF2 /* Uni Sans SemiBold Italic.otf */ = {isa = PBXFileReference; name = "Uni Sans SemiBold Italic.otf"; path = "../assets/fonts/UniSans/Uni Sans SemiBold Italic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		7730C8A287844680B25E02BA /* Uni Sans SemiBold.otf */ = {isa = PBXFileReference; name = "Uni Sans SemiBold.otf"; path = "../assets/fonts/UniSans/Uni Sans SemiBold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6F14E9DE33664AF6A2579F78 /* Uni Sans Thin Italic.otf */ = {isa = PBXFileReference; name = "Uni Sans Thin Italic.otf"; path = "../assets/fonts/UniSans/Uni Sans Thin Italic.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A40C641F9A5A46068687AF0B /* Uni Sans Thin.otf */ = {isa = PBXFileReference; name = "Uni Sans Thin.otf"; path = "../assets/fonts/UniSans/Uni Sans Thin.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +102,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				724E0DB16A1A4BEA8E38288A /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -96,6 +125,28 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		724E0DB16A1A4BEA8E38288A /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				45FED45A5423404991BB580B /* Uni Sans Bold Italic.otf */,
+				7BDCAA30AA2B4E68AA61E4D8 /* Uni Sans Bold.otf */,
+				F82FF6B26723428D8953E0AE /* Uni Sans Book Italic.otf */,
+				DABCC2CA340E4ADFA509232C /* Uni Sans Book.otf */,
+				5D9A94F1E0B94BBDAC2D157A /* Uni Sans Heavy Italic.otf */,
+				3B0F04AD486740DB838DCD51 /* Uni Sans Heavy.otf */,
+				BBDDA99D594844A4953CFF60 /* Uni Sans Italic.otf */,
+				859ACCD5844C47EAA9643197 /* Uni Sans Light Italic.otf */,
+				F90A586243D64E42B8FF8FF9 /* Uni Sans Light.otf */,
+				02805E0569C144F0A10B1B54 /* Uni Sans Regular.otf */,
+				D6F49BDA03804915B32F8AF2 /* Uni Sans SemiBold Italic.otf */,
+				7730C8A287844680B25E02BA /* Uni Sans SemiBold.otf */,
+				6F14E9DE33664AF6A2579F78 /* Uni Sans Thin Italic.otf */,
+				A40C641F9A5A46068687AF0B /* Uni Sans Thin.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -159,6 +210,20 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				1B695A7BECE346C0BB2F2275 /* Uni Sans Bold Italic.otf in Resources */,
+				0F95C53AE1814B0FAC1E9EA8 /* Uni Sans Bold.otf in Resources */,
+				2398BD2F08BD48CC8211AB37 /* Uni Sans Book Italic.otf in Resources */,
+				A0F119D284C1471899FBC0D5 /* Uni Sans Book.otf in Resources */,
+				61901C1F6AEB4A85B67ECB4C /* Uni Sans Heavy Italic.otf in Resources */,
+				430749893B39459AB949963A /* Uni Sans Heavy.otf in Resources */,
+				5337C34D55D344829DE53025 /* Uni Sans Italic.otf in Resources */,
+				76DDF8DCEF9345F5A06A0A92 /* Uni Sans Light Italic.otf in Resources */,
+				0103A7BC00D342AB9BBB9E02 /* Uni Sans Light.otf in Resources */,
+				4C5FEB61193B4D578B8488D7 /* Uni Sans Regular.otf in Resources */,
+				A4FC82DADB0641569E5C9FF0 /* Uni Sans SemiBold Italic.otf in Resources */,
+				B33CE7E6D25A4A98BFC2D1F9 /* Uni Sans SemiBold.otf in Resources */,
+				DDA69E46E16144CAB1AB7FD0 /* Uni Sans Thin Italic.otf in Resources */,
+				D35C26A717C540CFA726BE89 /* Uni Sans Thin.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

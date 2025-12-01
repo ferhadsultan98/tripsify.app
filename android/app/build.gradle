@@ -1,6 +1,23 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
+import groovy.json.JsonSlurper
+
+/**
+ * Helper functions for Versioning
+ */
+def getNpmVersion() {
+    def inputFile = new File(rootProject.projectDir, '../package.json')
+    def json = new JsonSlurper().parseText(inputFile.text)
+    return json.version
+}
+
+def getTimestampVersionCode() {
+    // Format: YYDDDHHmm (Year, DayOfYear, Hour, Minute)
+    // Example: 253261630. Unique and increasing.
+    def date = new Date()
+    return date.format('yyDHHmm').toInteger()
+}
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -82,8 +99,10 @@ android {
         applicationId "com.tripsifyapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        
+        // VERSIONING CONFIGURATION
+        versionCode getTimestampVersionCode() // Automatic (e.g. 253261630)
+        versionName getNpmVersion()           // Manual (from package.json)
     }
     signingConfigs {
         debug {
@@ -115,5 +134,23 @@ dependencies {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
+    }
+}
+
+apply plugin: 'com.google.gms.google-services'
+
+afterEvaluate {
+    def apkPath = "$buildDir/outputs/apk/release/app-release.apk"
+    // Get the version name dynamically from defaultConfig
+    def appVersion = android.defaultConfig.versionName
+
+    tasks.register("autoPublish", Exec) {
+        dependsOn("assembleRelease")
+        
+        if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+            commandLine "cmd", "/c", "curl -X POST https://api.tripsify.app/update/publish -F version=${appVersion} -F \"apk=@${apkPath}\""
+        } else {
+            commandLine "bash", "-c", "curl -X POST https://api.tripsify.app/update/publish -F version=${appVersion} -F apk=@${apkPath}"
+        }
     }
 }

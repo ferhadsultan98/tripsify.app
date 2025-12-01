@@ -1,0 +1,49 @@
+{
+  "login_screen": {
+    "title": "Tripsify Sürücü",
+    "subtitle": "Tripsify ile sürün.\nSeyahat ederken ek gelir kazanın.",
+    "login_btn": "Giriş Yap",
+    "signup_btn": "Kayıt Ol",
+    "privacy_policy": "Gizlilik Politikası",
+    "terms_of_service": "Kullanım Şartları"
+  },
+  "appearance_screen": {
+    "title": "Uygulama Görünümü",
+    "theme": "Tema",
+    "language": "Uygulama Dili",
+    "choose_theme": "Tema Seçin",
+    "choose_language": "Dil Seçin",
+    "system_default": "Sistem Varsayılanı",
+    "light": "Açık",
+    "dark": "Koyu",
+    "cancel": "İptal",
+    "ok": "Tamam"
+  },
+  "splash_screen": {
+    "title": "Keşfet. Sür. Kazan.",
+    "subtitle": "Tripsify ile yolculuğuna değer kat!"
+  },
+  "terms_screen": {
+    "title": "Kullanım Şartları",
+    "last_updated": "Son Güncelleme: 08 Aralık 2023",
+    "sections": {
+      "1": { "title": "1. Şartların Kabulü", "body": "Tripsify'ı kullanarak bu Kullanım Şartlarını kabul etmiş olursunuz. Kabul etmiyorsanız, lütfen platformumuzu kullanmayın." },
+      "2": { 
+        "title": "2. Kullanıcı Davranışı", 
+        "body": "Şunları yapmamayı kabul edersiniz:", 
+        "bullets": [
+            "Yasa veya düzenlemeleri ihlal etmek.",
+            "Platformumuzu yasa dışı veya yetkisiz amaçlarla kullanmak.",
+            "Virüs, kötü amaçlı yazılım veya zararlı kod göndermek.",
+            "Sistemlerimize yetkisiz erişim sağlamaya çalışmak."
+        ]
+      },
+      "3": { "title": "3. Kullanıcı İçeriği", "body": "Oluşturduğunuz içeriğin mülkiyeti sizde kalır. İçerik yükleyerek, Tripsify'a içeriğinizi kullanmak, saklamak ve görüntülemek için lisans vermiş olursunuz." },
+      "4": { "title": "4. Gizlilik", "body": "Gizlilik Politikamız bilgilerinizi nasıl topladığımızı açıklar. Tripsify'ı kullanarak veri uygulamalarımızı kabul etmiş olursunuz." },
+      "5": { "title": "5. Fesih", "body": "Bu Şartları ihlal ettiğinizde veya takdirimize bağlı başka bir nedenle hesabınızı askıya alma veya feshetme hakkımızı saklı tutarız." },
+      "6": { "title": "6. Sorumluluk Sınırı", "body": "Tripsify \"olduğu gibi\" sağlanır. Platformu kullanımınızdan doğacak zararlardan sorumlu değiliz." },
+      "7": { "title": "7. Şartlarda Değişiklik", "body": "Bu Şartları zaman zaman güncelleyebiliriz. Değişikliklerden sonra kullanımı sürdürmek yeni Şartları kabul ettiğiniz anlamına gelir." },
+      "8": { "title": "8. İletişim", "body": "Bu Şartlarla ilgili sorularınız varsa, lütfen support@tripsify.com adresinden bizimle iletişime geçin." }
+    }
+  }
+}

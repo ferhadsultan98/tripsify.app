@@ -1,0 +1,101 @@
+export const activeTours = [
+  {
+    id: 1,
+    title: "Austria 🇦🇹, France 🇫🇷, Switzerland 🇨🇭",
+    period: "22 Dec, 2025 - 3 Jan, 2026",
+    workingDays: "11 days",
+    passengers: "2 Adults, 2 Children, 1 Infant",
+    car: "Nissan Qashqai - SUV",
+    included: [
+      "Car rental from Poland",
+      "Petrol and Vignettes",
+      "Parking fees",
+    ],
+     not_included: [
+      "Accommodations",
+      "Food",
+    ],
+    salary: "2353.22 €",
+    requestSent: false,
+  },
+  {
+    id: 2,
+    title: "Germany 🇩🇪, Belgium 🇧🇪, Netherlands 🇳🇱",
+    period: "15 Jan, 2026 - 25 Jan, 2026",
+    workingDays: "10 days",
+    passengers: "1 Adult, 3 Children",
+    car: "Toyota RAV4 - SUV",
+    included: [
+      "Car rental from Poland",
+      "Petrol and Vignettes",
+      "Parking fees",
+      "Accommodations",
+      "Food",
+    ],
+    salary: "2150.00 €",
+    requestSent: true,
+  },
+  {
+    id: 3,
+    title: "Italy 🇮🇹, Spain 🇪🇸, Portugal 🇵🇹",
+    period: "05 Feb, 2026 - 20 Feb, 2026",
+    workingDays: "15 days",
+    passengers: "2 Adults",
+    car: "Mercedes E-Class - Sedan",
+    included: [
+      "Car rental from Poland",
+      "Petrol and Vignettes",
+      "Parking fees",
+      "Accommodations",
+      "Food",
+    ],
+    salary: "3200.50 €",
+    requestSent: false,
+  },
+];
+
+export const completedTours = [
+  {
+    id: 101,
+    title: "Poland, Czech Republic, Slovakia",
+    period: "10 Nov, 2025 - 18 Nov, 2025",
+    workingDays: "8 days",
+    passengers: "3 Adults, 1 Child",
+    car: "Volkswagen Passat - Sedan",
+    salary: "1800.00 €",
+    completedDate: "18 Nov, 2025",
+    rating: 4.8,
+  },
+  {
+    id: 102,
+    title: "Hungary, Romania, Bulgaria",
+    period: "25 Oct, 2025 - 05 Nov, 2025",
+    workingDays: "11 days",
+    passengers: "2 Adults, 2 Children",
+    car: "Ford Focus - Sedan",
+    salary: "2100.00 €",
+    completedDate: "05 Nov, 2025",
+    rating: 5.0,
+  },
+];
+
+export const pendingTours = [
+  {
+    id: 201,
+    title: "Croatia, Montenegro, Albania",
+    period: "10 Mar, 2026 - 22 Mar, 2026",
+    workingDays: "12 days",
+    passengers: "2 Adults, 1 Infant",
+    car: "Audi A6 - Sedan",
+    included: [
+      "Car rental from Poland",
+      "Petrol and Vignettes",
+      "Parking fees",
+      "Accommodations",
+      "Food",
+    ],
+    salary: "2650.00 €",
+    status: "pending",
+    appliedDate: "01 Dec, 2025",
+  },
+];

@@ -1,0 +1,49 @@
+{
+  "login_screen": {
+    "title": "Tripsify Sürücü",
+    "subtitle": "Tripsify ilə sürün.\nSəyahət edərkən əlavə gəlir qazanın.",
+    "login_btn": "Giriş",
+    "signup_btn": "Qeydiyyat",
+    "privacy_policy": "Məxfilik Siyasəti",
+    "terms_of_service": "İstifadə Şərtləri"
+  },
+   "appearance_screen": {
+    "title": "Tətbiq Görünüşü",
+    "theme": "Mövzu",
+    "language": "Tətbiq Dili",
+    "choose_theme": "Mövzu Seçin",
+    "choose_language": "Dil Seçin",
+    "system_default": "Sistem Varsayılanı",
+    "light": "Açıq",
+    "dark": "Tünd",
+    "cancel": "Ləğv et",
+    "ok": "Tamam"
+  },
+   "splash_screen": {
+    "title": "Kəşf et. Sür. Qazan.",
+    "subtitle": "Tripsify ilə səyahətini dəyərləndir!"
+  },
+   "terms_screen": {
+    "title": "İstifadə Şərtləri",
+    "last_updated": "Son Yenilənmə: 8 Dekabr 2023",
+    "sections": {
+      "1": { "title": "1. Şərtlərin Qəbulu", "body": "Tripsify istifadə edərək bu İstifadə Şərtləri ilə razılaşırsınız. Əgər razı deyilsinizsə, xahiş edirik platformamızdan istifadə etməyəsiniz." },
+      "2": { 
+        "title": "2. İstifadəçi Davranışı", 
+        "body": "Aşağıdakıları etməməyə razılıq verirsiniz:", 
+        "bullets": [
+            "Qanunları və ya qaydaları pozmaq.",
+            "Platformamızı hər hansı qeyri-qanuni məqsədlə istifadə etmək.",
+            "Virus, zərərli proqram və ya zərərli kodlar ötürmək.",
+            "Sistemlərimizə icazəsiz daxil olmağa cəhd etmək."
+        ]
+      },
+      "3": { "title": "3. İstifadəçi Məzmunu", "body": "Yaratdığınız məzmunun mülkiyyət hüququ sizdə qalır. Məzmun yükləməklə, Tripsify-a məzmununuzu platforma məqsədləri üçün istifadə etmək, saxlamaq və nümayiş etdirmək üçün qeyri-eksklüziv lisenziya verirsiniz." },
+      "4": { "title": "4. Məxfilik", "body": "Məxfilik Siyasətimiz məlumatlarınızı necə topladığımızı və qoruduğumuzu izah edir. Tripsify istifadə edərək, Məxfilik Siyasətində göstərilən qaydalarla razılaşırsınız." },
+      "5": { "title": "5. Xitam", "body": "Şərtləri pozduğunuz halda və ya istənilən digər səbəbdən hesabınızı istənilən vaxt dayandırmaq və ya ləğv etmək hüququnu özümüzdə saxlayırıq." },
+      "6": { "title": "6. Məsuliyyətin Məhdudlaşdırılması", "body": "Tripsify \"olduğu kimi\" təqdim edilir. Platformadan istifadənizdən yaranan hər hansı zərərə görə məsuliyyət daşımırıq." },
+      "7": { "title": "7. Şərtlərin Dəyişdirilməsi", "body": "Bu Şərtləri zaman-zaman yeniləyə bilərik. Dəyişikliklərdən sonra platformadan istifadəyə davam etmək yeni Şərtləri qəbul etdiyiniz deməkdir." },
+      "8": { "title": "8. Bizimlə Əlaqə", "body": "Bu Şərtlərlə bağlı suallarınız varsa, lütfən support@tripsify.com ünvanı ilə əlaqə saxlayın." }
+    }
+  }
+}
