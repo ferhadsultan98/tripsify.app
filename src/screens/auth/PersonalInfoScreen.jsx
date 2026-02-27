@@ -12,11 +12,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ScreenHeader from '../../components/common/ScreenHeader';
 import Select from '../../components/common/Select';
-import { colors } from '../../styles/colors';
 import { spacing } from '../../styles/spacing';
 import { fontFamily } from '../../styles/fonts';
+import { useTheme } from '../../context/ThemeContext'; // Theme Hook
 
 const PersonalInfoScreen = ({ navigation }) => {
+  const { theme } = useTheme(); // Theme Hook
   const [firstName, setFirstName] = useState('');
   const [surname, setSurname] = useState('');
   const [gender, setGender] = useState('');
@@ -56,11 +57,12 @@ const PersonalInfoScreen = ({ navigation }) => {
 
   const handleContinue = () => {
     // Validation və növbəti screen
-  navigation.navigate('DocumentsScreen');
+    navigation.navigate('DocumentsScreen');
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
+    // SafeAreaView fon rəngi dinamik
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -77,18 +79,24 @@ const PersonalInfoScreen = ({ navigation }) => {
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
         >
-          <Text style={styles.title}>Personal Informations</Text>
-          <Text style={styles.subtitle}>
+          <Text style={[styles.title, { color: theme.textPrimary }]}>Personal Informations</Text>
+          <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
             The customer will only see your name and contact information.
           </Text>
 
           {/* First Name */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>First Name *</Text>
+            <Text style={[styles.label, { color: theme.textPrimary }]}>First Name *</Text>
             <TextInput
-              style={styles.input}
+              style={[
+                  styles.input, 
+                  { 
+                      backgroundColor: theme.inputBg, 
+                      color: theme.textPrimary 
+                  }
+              ]}
               placeholder="First name"
-              placeholderTextColor={colors.textLight}
+              placeholderTextColor={theme.textSecondary}
               value={firstName}
               onChangeText={setFirstName}
             />
@@ -96,11 +104,17 @@ const PersonalInfoScreen = ({ navigation }) => {
 
           {/* Surname */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Surname *</Text>
+            <Text style={[styles.label, { color: theme.textPrimary }]}>Surname *</Text>
             <TextInput
-              style={styles.input}
+              style={[
+                  styles.input, 
+                  { 
+                      backgroundColor: theme.inputBg, 
+                      color: theme.textPrimary 
+                  }
+              ]}
               placeholder="Surname"
-              placeholderTextColor={colors.textLight}
+              placeholderTextColor={theme.textSecondary}
               value={surname}
               onChangeText={setSurname}
             />
@@ -113,6 +127,7 @@ const PersonalInfoScreen = ({ navigation }) => {
             options={genderOptions}
             onSelect={setGender}
             placeholder="Gender"
+            searchable={false}
           />
 
           {/* Checkbox */}
@@ -120,10 +135,19 @@ const PersonalInfoScreen = ({ navigation }) => {
             style={styles.checkboxContainer}
             onPress={() => setHasVehicle(!hasVehicle)}
           >
-            <View style={[styles.checkbox, hasVehicle && styles.checkboxChecked]}>
-              {hasVehicle && <Text style={styles.checkmark}>✓</Text>}
+            <View 
+                style={[
+                    styles.checkbox, 
+                    { borderColor: theme.border },
+                    hasVehicle && { 
+                        backgroundColor: theme.primary, 
+                        borderColor: theme.primary 
+                    }
+                ]}
+            >
+              {hasVehicle && <Text style={[styles.checkmark, { color: '#FFFFFF' }]}>✓</Text>}
             </View>
-            <Text style={styles.checkboxText}>
+            <Text style={[styles.checkboxText, { color: theme.textPrimary }]}>
               I have a vehicle that I will drive.
             </Text>
           </TouchableOpacity>
@@ -150,11 +174,17 @@ const PersonalInfoScreen = ({ navigation }) => {
 
               {/* License Plate */}
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>License plate *</Text>
+                <Text style={[styles.label, { color: theme.textPrimary }]}>License plate *</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                      styles.input, 
+                      { 
+                          backgroundColor: theme.inputBg, 
+                          color: theme.textPrimary 
+                      }
+                  ]}
                   placeholder="77-TT-777"
-                  placeholderTextColor={colors.textLight}
+                  placeholderTextColor={theme.textSecondary}
                   value={licensePlate}
                   onChangeText={setLicensePlate}
                 />
@@ -173,12 +203,12 @@ const PersonalInfoScreen = ({ navigation }) => {
         </ScrollView>
 
         {/* Bottom Button */}
-        <View style={styles.bottomSection}>
+        <View style={[styles.bottomSection, { borderTopColor: theme.border }]}>
           <TouchableOpacity
-            style={styles.continueButton}
+            style={[styles.continueButton, { backgroundColor: theme.primary }]}
             onPress={handleContinue}
           >
-            <Text style={styles.continueButtonText}>Continue</Text>
+            <Text style={[styles.continueButtonText, { color: '#FFFFFF' }]}>Continue</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -202,7 +232,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fontFamily.bold,
     fontSize: 24, 
-    color: colors.text,
+    // color: colors.text, // Dinamik
     marginBottom: spacing.small,
   },
 
@@ -210,7 +240,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: fontFamily.regular,
     fontSize: 16, 
-    color: colors.textLight,
+    // color: colors.textLight, // Dinamik
     lineHeight: 22.4,
     marginBottom: spacing.xlarge,
   },
@@ -222,7 +252,7 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16, 
-    color: colors.text,
+    // color: colors.text, // Dinamik
     marginBottom: spacing.small,
   },
   input: {
@@ -231,9 +261,9 @@ const styles = StyleSheet.create({
     
     fontFamily: fontFamily.regular,
     fontSize: 16, 
-    color: colors.text,
+    // color: colors.text, // Dinamik
     borderRadius: 8,
-    backgroundColor: "#F2F2F2",
+    // backgroundColor: "#F2F2F2", // Dinamik
     paddingHorizontal: 20,
   },
 
@@ -248,24 +278,24 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: colors.border,
+    // borderColor: colors.border, // Dinamik
     marginRight: spacing.small,
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkboxChecked: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    // backgroundColor: colors.primary, // Dinamik inline
+    // borderColor: colors.primary, // Dinamik inline
   },
   checkmark: {
     fontFamily: fontFamily.bold,
-    color: colors.white,
+    // color: colors.white, // Dinamik inline
     fontSize: 12, 
   },
   checkboxText: {
     fontFamily: fontFamily.regular,
     fontSize: 16, 
-    color: colors.text,
+    // color: colors.text, // Dinamik
   },
 
   /** BOTTOM SECTION **/
@@ -273,21 +303,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.horizontal,
     paddingVertical: spacing.large,
     borderTopWidth: 1,
-    borderTopColor: '#F0F0F0',
+    // borderTopColor: '#F0F0F0', // Dinamik
   },
   continueButton: {
      height: 55,
     borderRadius: 25,
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary, // Dinamik
     justifyContent: "center",
     alignItems: "center",
   },
   continueButtonText: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16, 
-    color: colors.white,
+    // color: colors.white, // Dinamik
   },
 });
-
 
 export default PersonalInfoScreen;

@@ -20,7 +20,7 @@ export async function initNotifications() {
       sound: "default",
     });
 
-    // 3. Firebase icazəsi (iOS üçün vacibdir)
+    // 3. Firebase icazəsi (iOS üçün vacibdir) 
     const authStatus = await messaging().requestPermission();
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -30,7 +30,6 @@ export async function initNotifications() {
       console.log("Authorization status:", authStatus);
     }
 
-    // 4. Token almaq və Firestore-a yazmaq
     const token = await messaging().getToken();
     console.log("FCM Token:", token);
 
@@ -39,7 +38,7 @@ export async function initNotifications() {
         active: true,
         platform: Platform.OS,
         updatedAt: firestore.FieldValue.serverTimestamp(),
-      }, { merge: true }); // merge: true - varsa yeniləyir, yoxsa yaradır
+      }, { merge: true });
     }
 
     // 5. YENİ: "all_users" kanalına abunə olmaq (Update bildirişi üçün vacibdir)
@@ -55,7 +54,7 @@ export async function initNotifications() {
         body: remoteMessage.notification?.body || "",
         android: {
           channelId: "default",
-          smallIcon: "ic_launcher", // Əgər xüsusi icon varsa dəyişin
+          smallIcon: "ic_launcher", 
           pressAction: {
             id: "default",
           },
@@ -63,11 +62,10 @@ export async function initNotifications() {
       });
     });
 
-    // 7. Arxa planda (Background) gələn bildirişlər üçün handler
+ 
     messaging().setBackgroundMessageHandler(async (remoteMessage) => {
       console.log("Background message handled:", remoteMessage);
-      // Firebase özü arxa planda bildirişi göstərir, əlavə kod lazım deyil.
-      // Amma data-payload varsa burada emal edilə bilər.
+    
     });
 
   } catch (error) {

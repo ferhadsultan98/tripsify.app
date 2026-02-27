@@ -51,20 +51,20 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Uni Sans Bold Italic.otf</string>
-		<string>Uni Sans Bold.otf</string>
-		<string>Uni Sans Book Italic.otf</string>
-		<string>Uni Sans Book.otf</string>
-		<string>Uni Sans Heavy Italic.otf</string>
-		<string>Uni Sans Heavy.otf</string>
-		<string>Uni Sans Italic.otf</string>
-		<string>Uni Sans Light Italic.otf</string>
-		<string>Uni Sans Light.otf</string>
-		<string>Uni Sans Regular.otf</string>
-		<string>Uni Sans SemiBold Italic.otf</string>
-		<string>Uni Sans SemiBold.otf</string>
-		<string>Uni Sans Thin Italic.otf</string>
-		<string>Uni Sans Thin.otf</string>
+		<string>PlusJakartaSans-Bold.ttf</string>
+		<string>PlusJakartaSans-BoldItalic.ttf</string>
+		<string>PlusJakartaSans-ExtraBold.ttf</string>
+		<string>PlusJakartaSans-ExtraBoldItalic.ttf</string>
+		<string>PlusJakartaSans-ExtraLight.ttf</string>
+		<string>PlusJakartaSans-ExtraLightItalic.ttf</string>
+		<string>PlusJakartaSans-Italic.ttf</string>
+		<string>PlusJakartaSans-Light.ttf</string>
+		<string>PlusJakartaSans-LightItalic.ttf</string>
+		<string>PlusJakartaSans-Medium.ttf</string>
+		<string>PlusJakartaSans-MediumItalic.ttf</string>
+		<string>PlusJakartaSans-Regular.ttf</string>
+		<string>PlusJakartaSans-SemiBold.ttf</string>
+		<string>PlusJakartaSans-SemiBoldItalic.ttf</string>
 	</array>
 </dict>
 </plist>

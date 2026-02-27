@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import BackButton from './BackButton';
 import ProgressBar from './ProgressBar';
 import { spacing } from '../../styles/spacing';
-import { colors } from '../../styles/colors';
 import { fontFamily } from "../../styles/fonts";
+import { useTheme } from '../../context/ThemeContext'; // YENİ: Theme Hook
 
 const ScreenHeader = ({
   onBackPress,
@@ -15,8 +15,13 @@ const ScreenHeader = ({
   rightIcon, 
   onRightIconPress, 
 }) => {
+  const { theme } = useTheme(); // Theme Hook-dan istifadə
+
   return (
-    <View style={styles.container}>
+    // Container-in arxa fon rəngini dinamik edə bilərsiniz, 
+    // amma adətən parent komponent (məsələn SafeAreaView) bunu həll edir.
+    // Əgər header ayrıca rəngdə olmalıdırsa: backgroundColor: theme.background
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.topRow}>
         <BackButton onPress={onBackPress} />
 
@@ -24,7 +29,10 @@ const ScreenHeader = ({
           {showProgress && currentStep && totalSteps ? (
             <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
           ) : (
-            <Text style={styles.titleInline} numberOfLines={1}>
+            <Text 
+              style={[styles.titleInline, { color: theme.textPrimary }]} 
+              numberOfLines={1}
+            >
               {title}
             </Text>
           )}
@@ -32,6 +40,8 @@ const ScreenHeader = ({
 
         {rightIcon ? (
           <TouchableOpacity onPress={onRightIconPress}>
+            {/* Sağ ikonu göstərərkən onun rəngini də valideyn komponentdən idarə etmək olar, 
+                və ya əgər bu bir SVG-dirsə, fill={theme.iconColor} verilə bilər */}
             {rightIcon}
           </TouchableOpacity>
         ) : (
@@ -39,9 +49,10 @@ const ScreenHeader = ({
         )}
       </View>
 
-   
       {showProgress && title && (
-        <Text style={styles.titleBelow}>{title}</Text>
+        <Text style={[styles.titleBelow, { color: theme.textSecondary }]}>
+          {title}
+        </Text>
       )}
     </View>
   );
@@ -49,10 +60,10 @@ const ScreenHeader = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: spacing.horizontal,
+    paddingHorizontal: 24,
     paddingTop: 12,
     paddingBottom: 16,
-    // backgroundColor: '#FFF', 
+    // backgroundColor: '#FFF', // Silindi, inline style-da dinamik oldu
   },
   topRow: {
     flexDirection: 'row',
@@ -72,13 +83,13 @@ const styles = StyleSheet.create({
   titleInline: {
     fontFamily: fontFamily.bold,
     fontSize: 24,
-    color: '#212121',
+    // color: '#212121', // Silindi, inline style-da dinamik oldu
     textAlign: 'center',
   },
   titleBelow: {
     fontFamily: fontFamily.regular,
     fontSize: 18,
-    color: '#424242',
+    // color: '#424242', // Silindi, inline style-da dinamik oldu
     marginTop: 16,
     textAlign: 'center',
   },

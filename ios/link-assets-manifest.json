@@ -2,60 +2,60 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "assets/fonts/UniSans/Uni Sans Bold Italic.otf",
-      "sha1": "f9127dbc73691383347207383a4cdfbedea98081"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-Bold.ttf",
+      "sha1": "606f1b32433c9b6902d97c657f9b3a2f89bab582"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans Bold.otf",
-      "sha1": "2aa062d557091d09133ca6d49cd2f6125e7bba35"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-BoldItalic.ttf",
+      "sha1": "3c7982159791d551e0dc9b9e0d2e333fe3bbfd0e"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans Book Italic.otf",
-      "sha1": "cf75ff1d9a4b0fe2d0b59d5b75833e572374a7f0"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-ExtraBold.ttf",
+      "sha1": "1f1ff730addefdfe324657b5db5056fb05b4b43b"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans Book.otf",
-      "sha1": "6ff255c023f264ac1c3b9d2d29eb1b9aca73260f"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-ExtraBoldItalic.ttf",
+      "sha1": "12f7cdcf58d6c7544ee78256e8a3e0f1bc67d6bb"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans Heavy Italic.otf",
-      "sha1": "3c35c039763573cdd1d80918f7be8d9d0f319300"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-ExtraLight.ttf",
+      "sha1": "8c8c67a8c0ffac6da8093fea6a710e4e69492916"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans Heavy.otf",
-      "sha1": "bb1fb8c789dce011495946d384a087015914140f"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-ExtraLightItalic.ttf",
+      "sha1": "530fa67f1d72599913183f5f5046ba0973c71572"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans Italic.otf",
-      "sha1": "92685153abc568f7e0f5c2b71f51a7cc4b7f857c"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-Italic.ttf",
+      "sha1": "9511da5fd2efd40a427ba6489635569d85a7a683"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans Light Italic.otf",
-      "sha1": "32c91d52d62835e5d6afb1849c7f0dc231f7750e"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-Light.ttf",
+      "sha1": "88b01027e4d47b1cb0f4e6fbae888ddc81866f78"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans Light.otf",
-      "sha1": "ebbf6c51f86c8d8021bbc90fc316926928d1eaea"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-LightItalic.ttf",
+      "sha1": "33a0046a48c1f9ecaa33a73b888de8c6f8730333"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans Regular.otf",
-      "sha1": "ba49977ff36fd3ff988cc03b476eb54483433192"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-Medium.ttf",
+      "sha1": "c328c76cab7078b89d925d73809f03c12a00143a"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans SemiBold Italic.otf",
-      "sha1": "672461cd7a13bf92d4595860207bde1ed5f867b6"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-MediumItalic.ttf",
+      "sha1": "40b026f7db1b69a439548baa81dac421ac0fa927"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans SemiBold.otf",
-      "sha1": "9f6c98f9c2ea71172ac7046c9c057cb2c197f09e"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-Regular.ttf",
+      "sha1": "ea07d33f23fb6c4856a642d035c463dc99a7f88a"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans Thin Italic.otf",
-      "sha1": "c9f7e3a2899deec7f1b4b6119d4d3e8471990d74"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-SemiBold.ttf",
+      "sha1": "576ccf10be11652fc309f3682a327a98847c596e"
     },
     {
-      "path": "assets/fonts/UniSans/Uni Sans Thin.otf",
-      "sha1": "4fe57b300957e4c8d9f325404a2b9638ba554882"
+      "path": "assets/fonts/PlusJakarta/PlusJakartaSans-SemiBoldItalic.ttf",
+      "sha1": "693c174f75547d2bc28a319a76efb4575ba1bb02"
     }
   ]
 }

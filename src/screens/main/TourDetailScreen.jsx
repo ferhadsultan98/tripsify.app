@@ -12,13 +12,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { TabView } from "react-native-tab-view";
 import PagerView from "react-native-pager-view"; // Import PagerView
 import ScreenHeader from "../../components/common/ScreenHeader";
-import { colors } from "../../styles/colors";
 import { fontFamily } from "../../styles/fonts";
 import DetailsTab from "./DetailsTab";
 import ScheduleTab from "./ScheduleTab";
 import RequirementsTab from "./RequirementsTab";
+import { useTheme } from "../../context/ThemeContext"; // Theme Hook
 
 const TourDetailScreen = ({ route, navigation }) => {
+  const { theme } = useTheme(); // Theme Hook
   const { tour } = route.params;
   const layout = useWindowDimensions();
 
@@ -51,11 +52,14 @@ const TourDetailScreen = ({ route, navigation }) => {
     });
 
     return (
-      <View style={styles.tabBar}>
+      <View style={[styles.tabBar, { backgroundColor: theme.inputBg }]}>
         <Animated.View
           style={[
             styles.indicator,
-            { transform: [{ translateX: indicatorPosition }] },
+            { 
+                transform: [{ translateX: indicatorPosition }],
+                backgroundColor: theme.primary 
+            },
           ]}
         />
         {props.navigationState.routes.map((route, i) => (
@@ -64,7 +68,13 @@ const TourDetailScreen = ({ route, navigation }) => {
             style={styles.tab}
             onPress={() => props.jumpTo(route.key)}
           >
-            <Text style={[styles.tabText, index === i && styles.activeTabText]}>
+            <Text 
+                style={[
+                    styles.tabText, 
+                    { color: theme.textSecondary }, // Passiv rəng
+                    index === i && { color: '#FFFFFF' } // Aktiv rəng (həmişə ağ)
+                ]}
+            >
               {route.title}
             </Text>
           </TouchableOpacity>
@@ -74,7 +84,8 @@ const TourDetailScreen = ({ route, navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    // SafeAreaView fon rəngi dinamik
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
       <ScreenHeader
         title="Tour Details"
         onBackPress={() => navigation.goBack()}
@@ -94,9 +105,9 @@ const TourDetailScreen = ({ route, navigation }) => {
         lazyPreloadDistance={1}
       />
 
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerButton}>
-          <Text style={styles.footerButtonText}>
+      <View style={[styles.footer, { backgroundColor: theme.cardBg, borderTopColor: theme.border }]}>
+        <TouchableOpacity style={[styles.footerButton, { backgroundColor: theme.primary }]}>
+          <Text style={[styles.footerButtonText, { color: '#FFFFFF' }]}>
             Send Request For This Tour
           </Text>
         </TouchableOpacity>
@@ -110,7 +121,7 @@ const styles = StyleSheet.create({
   tabBar: {
     flexDirection: "row",
     position: "relative",
-    backgroundColor: "#F0F0F0",
+    // backgroundColor: "#F0F0F0", // Dinamik
     marginHorizontal: 24,
     borderRadius: 8,
     marginTop: 8,
@@ -120,16 +131,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "33.33%",
     height: "100%",
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary, // Dinamik
     borderRadius: 8,
   },
   tab: { flex: 1, paddingVertical: 14, alignItems: "center" },
   tabText: {
     fontFamily: fontFamily.semiBold,
     fontSize: 14,
-    color: colors.text,
+    // color: colors.text, // Dinamik
   },
-  activeTabText: { color: colors.white },
+  // activeTabText: { color: colors.white }, // Inline stilə köçürüldü
   scrollContent: {
     paddingHorizontal: 24,
     paddingBottom: 24,
@@ -137,21 +148,21 @@ const styles = StyleSheet.create({
   footer: {
     padding: 24,
     paddingBottom: 30,
-    backgroundColor: "white",
+    // backgroundColor: "white", // Dinamik
     borderTopWidth: 1,
-    borderTopColor: "#F0F0F0",
+    // borderTopColor: "#F0F0F0", // Dinamik
   },
   footerButton: {
     height: 55,
     borderRadius: 12,
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary, // Dinamik
     justifyContent: "center",
     alignItems: "center",
   },
   footerButtonText: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: "white",
+    // color: "white", // Dinamik
   },
 });
 

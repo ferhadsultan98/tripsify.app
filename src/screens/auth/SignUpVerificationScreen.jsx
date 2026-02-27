@@ -8,32 +8,34 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ScreenHeader from "../../components/common/ScreenHeader";
-import { colors } from "../../styles/colors";
 import MessageIcon from "../../../assets/images/message.svg";
 import WhatsappIcon from "../../../assets/images/whatsapp.svg";
 import CallIcon from "../../../assets/images/callIcon.svg";
-import { fontFamily } from '../../styles/fonts';
+import { fontFamily } from "../../styles/fonts";
+import { useTheme } from "../../context/ThemeContext"; // Theme Hook
 
 const SignUpVerificationScreen = ({ navigation, route }) => {
+  const { theme } = useTheme(); // Theme Hook
   const { phoneNumber, email, currentStep, totalSteps } = route.params || {};
   const [selectedMethod, setSelectedMethod] = useState(null);
 
   const handleMethodSelect = (selectedOption) => {
     setSelectedMethod(selectedOption);
-    
-    navigation.navigate('VerificationCodeScreen', { 
+
+    navigation.navigate("VerificationCodeScreen", {
       phoneNumber,
       email,
-      method: 'phone', // Həmişə 'phone' olacaq
+      method: "phone",
       verificationMethod: selectedOption,
       currentStep: (currentStep || 2) + 1,
       totalSteps: totalSteps || 6,
-      flow: 'register',
+      flow: "register",
     });
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
+    // SafeAreaView fon rəngi dinamik
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <View style={styles.container}>
         <ScreenHeader
           onBackPress={() => navigation.goBack()}
@@ -50,13 +52,15 @@ const SignUpVerificationScreen = ({ navigation, route }) => {
           <View style={styles.contentWrapper}>
             {/* Header Section */}
             <View style={styles.headerSection}>
-              <Text style={styles.title}>Choose a verification method</Text>
+              <Text style={[styles.title, { color: theme.textPrimary }]}>
+                Choose a verification method
+              </Text>
 
-              <Text style={styles.subtitle}>
+              <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
                 The verification code will be sent to this number:
               </Text>
-              <Text style={styles.contactInfo}>
-                {phoneNumber || '+994502122237'}
+              <Text style={[styles.contactInfo, { color: theme.primary }]}>
+                {phoneNumber || "+994502122237"}
               </Text>
             </View>
 
@@ -66,42 +70,69 @@ const SignUpVerificationScreen = ({ navigation, route }) => {
               <TouchableOpacity
                 style={[
                   styles.optionCard,
-                  selectedMethod === "sms" && styles.optionCardSelected,
+                  { borderColor: theme.border, backgroundColor: theme.cardBg }, // Default dinamik
+                  selectedMethod === "sms" && {
+                    borderColor: theme.primary,
+                    backgroundColor:
+                      theme.mode === "dark" ? "#2C2C2C" : "#F5F0FF", // Seçiləndə fon
+                  },
                 ]}
                 onPress={() => handleMethodSelect("sms")}
               >
                 <View style={styles.iconContainer}>
-                  <MessageIcon width={24} height={24} />
+                  <MessageIcon
+                    width={24}
+                    height={24}
+                    fill={theme.textPrimary}
+                  />
+                  {/* İkon rəngi dinamik ola bilər, əgər SVG dəstəkləyirsə */}
                 </View>
-                <Text style={styles.optionText}>Get code with SMS</Text>
+                <Text style={[styles.optionText, { color: theme.textPrimary }]}>
+                  Get code with SMS
+                </Text>
               </TouchableOpacity>
 
               {/* WhatsApp Option */}
               <TouchableOpacity
                 style={[
                   styles.optionCard,
-                  selectedMethod === "whatsapp" && styles.optionCardSelected,
+                  { borderColor: theme.border, backgroundColor: theme.cardBg },
+                  selectedMethod === "whatsapp" && {
+                    borderColor: theme.primary,
+                    backgroundColor:
+                      theme.mode === "dark" ? "#2C2C2C" : "#F5F0FF",
+                  },
                 ]}
                 onPress={() => handleMethodSelect("whatsapp")}
               >
                 <View style={styles.iconContainer}>
                   <WhatsappIcon width={24} height={24} />
+                  {/* WhatsApp ikonu adətən öz rəngində qalır */}
                 </View>
-                <Text style={styles.optionText}>Get code with WhatsApp</Text>
+                <Text style={[styles.optionText, { color: theme.textPrimary }]}>
+                  Get code with WhatsApp
+                </Text>
               </TouchableOpacity>
 
               {/* Call Option */}
               <TouchableOpacity
                 style={[
                   styles.optionCard,
-                  selectedMethod === "call" && styles.optionCardSelected,
+                  { borderColor: theme.border, backgroundColor: theme.cardBg },
+                  selectedMethod === "call" && {
+                    borderColor: theme.primary,
+                    backgroundColor:
+                      theme.mode === "dark" ? "#2C2C2C" : "#F5F0FF",
+                  },
                 ]}
                 onPress={() => handleMethodSelect("call")}
               >
                 <View style={styles.iconContainer}>
-                  <CallIcon width={24} height={24} />
+                  <CallIcon width={24} height={24} fill={theme.textPrimary} />
                 </View>
-                <Text style={styles.optionText}>Get code with Call</Text>
+                <Text style={[styles.optionText, { color: theme.textPrimary }]}>
+                  Get code with Call
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -135,20 +166,20 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fontFamily.bold,
     fontSize: 24,
-    color: colors.text,
+    // color: colors.text, // Dinamik
     alignSelf: "center",
   },
   subtitle: {
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: "#616161",
+    // color: "#616161", // Dinamik
     alignSelf: "center",
     textAlign: "center",
   },
   contactInfo: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: "#8D62D7",
+    // color: "#8D62D7", // Dinamik
     alignSelf: "center",
   },
   optionsSection: {
@@ -159,15 +190,15 @@ const styles = StyleSheet.create({
   optionCard: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 1000,
+    borderRadius: 1000, // Pill shape
     padding: 16,
     borderWidth: 1,
-    borderColor: "#EEE",
+    // borderColor: "#EEE", // Dinamik
     width: "100%",
   },
   optionCardSelected: {
-    borderColor: colors.primary,
-    backgroundColor: "#F5F0FF",
+    // borderColor: colors.primary, // Dinamik inline
+    // backgroundColor: "#F5F0FF", // Dinamik inline
   },
   iconContainer: {
     width: 25,
@@ -178,10 +209,10 @@ const styles = StyleSheet.create({
   },
   optionText: {
     flex: 1,
-    textAlign:'center',
+    textAlign: "center",
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: colors.text,
+    // color: colors.text, // Dinamik
   },
 });
 

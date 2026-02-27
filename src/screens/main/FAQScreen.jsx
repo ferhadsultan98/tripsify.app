@@ -11,10 +11,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ScreenHeader from "../../components/common/ScreenHeader";
 import SearchIcon from "../../../assets/images/searchIcon.svg";
 import ChevronDownIcon from "../../../assets/images/downArrowIcon.svg";
-import { colors } from "../../styles/colors";
 import { fontFamily } from "../../styles/fonts";
+import { useTheme } from "../../context/ThemeContext"; // Theme Hook
 
 const FAQScreen = ({ navigation }) => {
+  const { theme } = useTheme(); // Theme Hook
   const [selectedTab, setSelectedTab] = useState("General");
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedId, setExpandedId] = useState(null);
@@ -94,7 +95,8 @@ const FAQScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    // SafeAreaView fon rəngi dinamik
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
       <View style={styles.container}>
         <ScreenHeader
           title="FAQ"
@@ -109,7 +111,7 @@ const FAQScreen = ({ navigation }) => {
           stickyHeaderIndices={[0]}
         >
           {/* Sticky Header: Tabs + Search */}
-          <View style={styles.stickyHeader}>
+          <View style={[styles.stickyHeader, { backgroundColor: theme.background }]}>
             {/* Tabs */}
             <ScrollView
               horizontal
@@ -122,14 +124,16 @@ const FAQScreen = ({ navigation }) => {
                   key={tab}
                   style={[
                     styles.tab,
-                    selectedTab === tab && styles.activeTab,
+                    { backgroundColor: theme.inputBg }, // Passiv fon
+                    selectedTab === tab && { backgroundColor: theme.primary }, // Aktiv fon
                   ]}
                   onPress={() => setSelectedTab(tab)}
                 >
                   <Text
                     style={[
                       styles.tabText,
-                      selectedTab === tab && styles.activeTabText,
+                      { color: theme.textSecondary }, // Passiv mətn
+                      selectedTab === tab && { color: '#FFFFFF' }, // Aktiv mətn (həmişə ağ)
                     ]}
                   >
                     {tab}
@@ -139,12 +143,12 @@ const FAQScreen = ({ navigation }) => {
             </ScrollView>
 
             {/* Search */}
-            <View style={styles.searchContainer}>
-              <SearchIcon width={20} height={20} fill="#9E9E9E" />
+            <View style={[styles.searchContainer, { backgroundColor: theme.inputBg }]}>
+              <SearchIcon width={20} height={20} fill={theme.textSecondary} />
               <TextInput
-                style={styles.searchInput}
+                style={[styles.searchInput, { color: theme.textPrimary }]}
                 placeholder="Search"
-                placeholderTextColor="#9E9E9E"
+                placeholderTextColor={theme.textSecondary}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
               />
@@ -154,16 +158,16 @@ const FAQScreen = ({ navigation }) => {
           {/* FAQ Accordion List */}
           <View style={styles.faqList}>
             {filteredFAQs.map((faq) => (
-              <View key={faq.id} style={styles.faqItem}>
+              <View key={faq.id} style={[styles.faqItem, { borderBottomColor: theme.border }]}>
                 <TouchableOpacity
                   style={styles.faqQuestion}
                   onPress={() => toggleExpand(faq.id)}
                 >
-                  <Text style={styles.questionText}>{faq.question}</Text>
+                  <Text style={[styles.questionText, { color: theme.textPrimary }]}>{faq.question}</Text>
                   <ChevronDownIcon
                     width={20}
                     height={20}
-                    fill="#000"
+                    fill={theme.iconColor}
                     style={[
                       styles.chevron,
                       expandedId === faq.id && styles.chevronExpanded,
@@ -172,7 +176,7 @@ const FAQScreen = ({ navigation }) => {
                 </TouchableOpacity>
                 {expandedId === faq.id && (
                   <View style={styles.faqAnswer}>
-                    <Text style={styles.answerText}>{faq.answer}</Text>
+                    <Text style={[styles.answerText, { color: theme.textSecondary }]}>{faq.answer}</Text>
                   </View>
                 )}
               </View>
@@ -187,7 +191,7 @@ const FAQScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white, // Dinamik
   },
 
   container: {
@@ -204,7 +208,7 @@ const styles = StyleSheet.create({
 
   /** Sticky Header **/
   stickyHeader: {
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white, // Dinamik
     paddingBottom: 16,
   },
 
@@ -220,27 +224,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
-    backgroundColor: "#F5F5F5",
+    // backgroundColor: "#F5F5F5", // Dinamik
   },
-  activeTab: {
-    backgroundColor: colors.primary,
-  },
+  // activeTab: { backgroundColor: colors.primary }, // Inline stilə köçürüldü
   tabText: {
     fontFamily: fontFamily.semiBold,
     fontSize: 14,
     fontWeight: "500",
-    color: "#757575",
+    // color: "#757575", // Dinamik
   },
-  activeTabText: {
-    color: "#FFF",
-  },
+  // activeTabText: { color: "#FFF" }, // Inline stilə köçürüldü
 
   /** Search **/
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
     height: 48,
-    backgroundColor: "#F5F5F5",
+    // backgroundColor: "#F5F5F5", // Dinamik
     borderRadius: 12,
     paddingHorizontal: 16,
     marginHorizontal: 24,
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: "#000",
+    // color: "#000", // Dinamik
   },
 
   /** FAQ Section **/
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
 
   faqItem: {
     borderBottomWidth: 1,
-    borderBottomColor: "#F0F0F0",
+    // borderBottomColor: "#F0F0F0", // Dinamik
     paddingBottom: 16,
   },
 
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
     fontWeight: "600",
-    color: "#000",
+    // color: "#000", // Dinamik
   },
 
   chevron: {
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.regular,
     fontSize: 14,
     fontWeight: "400",
-    color: "#757575",
+    // color: "#757575", // Dinamik
     lineHeight: 20,
   },
 });

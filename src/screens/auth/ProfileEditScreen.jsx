@@ -17,11 +17,15 @@ import PhoneInput from "../../components/common/PhoneInput";
 import EditIcon from "../../../assets/images/editIcon.svg";
 import EmailIcon from "../../../assets/images/email.svg";
 import { countries, cities } from "../../data/countries";
-import { colors } from "../../styles/colors";
 import { spacing } from "../../styles/spacing";
 import { fontFamily } from "../../styles/fonts";
+import { useTheme } from "../../context/ThemeContext";
+import { launchImageLibrary } from "react-native-image-picker";
+
+import winterLogo from "../../../assets/images/winterLogo.png";
 
 const ProfileEditScreen = ({ navigation }) => {
+  const { theme } = useTheme();
   const [formData, setFormData] = useState({
     name: "Vugar",
     surname: "Alishov",
@@ -51,6 +55,7 @@ const ProfileEditScreen = ({ navigation }) => {
   ];
 
   const selectedCountry = countries.find((c) => c.code === formData.country);
+  const [profileImage, setProfileImage] = useState(null);
 
   const handleCountryChange = (newCountry) => {
     setFormData({ ...formData, country: newCountry, city: "" });
@@ -60,9 +65,20 @@ const ProfileEditScreen = ({ navigation }) => {
     console.log("Saved:", formData);
     navigation.goBack();
   };
-
+  const handlePickImage = () => {
+    launchImageLibrary(
+      { mediaType: "photo", quality: 0.8, selectionLimit: 1 },
+      (response) => {
+        if (!response.didCancel && !response.errorCode) {
+          setProfileImage(response.assets[0].uri);
+        }
+      },
+    );
+  };
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: theme.background }]}
+    >
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -80,11 +96,17 @@ const ProfileEditScreen = ({ navigation }) => {
         >
           <View style={styles.profileSection}>
             <View style={styles.imageContainer}>
+              {/* SVG əvəzinə Image komponenti və import edilmiş PNG */}
               <Image
-                source={{ uri: "https://i.ibb.co/tpQx2nCy/app-con.png" }}
+                source={profileImage ? { uri: profileImage } : winterLogo}
                 style={styles.profileImage}
+                resizeMode="cover"
               />
-              <TouchableOpacity style={styles.editIconContainer}>
+
+              <TouchableOpacity
+                style={styles.editIconContainer}
+                onPress={handlePickImage}
+              >
                 <EditIcon width={25} height={25} fill="#FFF" />
               </TouchableOpacity>
             </View>
@@ -92,43 +114,62 @@ const ProfileEditScreen = ({ navigation }) => {
 
           <View style={styles.formContainer}>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Name</Text>
+              <Text style={[styles.label, { color: theme.textPrimary }]}>
+                Name
+              </Text>
               <TextInput
-                style={styles.input}
+                style={[
+                  styles.input,
+                  { backgroundColor: theme.inputBg, color: theme.textPrimary },
+                ]}
                 value={formData.name}
                 onChangeText={(text) =>
                   setFormData({ ...formData, name: text })
                 }
                 placeholder="Name"
-                placeholderTextColor="#9E9E9E"
+                placeholderTextColor={theme.textSecondary}
               />
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Surname</Text>
+              <Text style={[styles.label, { color: theme.textPrimary }]}>
+                Surname
+              </Text>
               <TextInput
-                style={styles.input}
+                style={[
+                  styles.input,
+                  { backgroundColor: theme.inputBg, color: theme.textPrimary },
+                ]}
                 value={formData.surname}
                 onChangeText={(text) =>
                   setFormData({ ...formData, surname: text })
                 }
                 placeholder="Surname"
-                placeholderTextColor="#9E9E9E"
+                placeholderTextColor={theme.textSecondary}
               />
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Email</Text>
-              <View style={styles.emailInput}>
-                <EmailIcon width={16} height={16} style={styles.emailIcon} />
+              <Text style={[styles.label, { color: theme.textPrimary }]}>
+                Email
+              </Text>
+              <View
+                style={[styles.emailInput, { backgroundColor: theme.inputBg }]}
+              >
+                <EmailIcon
+                  width={20}
+                  height={20}
+                  style={styles.emailIcon}
+                  fill={theme.textSecondary}
+                />
                 <TextInput
-                  style={styles.emailTextInput}
+                  style={[styles.emailTextInput, { color: theme.textPrimary }]}
                   value={formData.email}
                   onChangeText={(text) =>
                     setFormData({ ...formData, email: text })
                   }
                   placeholder="Email"
-                  placeholderTextColor="#9E9E9E"
+                  placeholderTextColor={theme.textSecondary}
                   keyboardType="email-address"
                   autoCapitalize="none"
                 />
@@ -136,14 +177,20 @@ const ProfileEditScreen = ({ navigation }) => {
             </View>
 
             <Select
+              label="Gender"
+              value={formData.gender}
+              options={genderOptions}
+              onSelect={(gender) => setFormData({ ...formData, gender })}
+              placeholder="Select gender"
+              searchable={false} // ← bunu əlavə et
+            />
+            <Select
               label="Country of Residence"
               value={formData.country}
               options={countryOptions}
-              onSelect={handleCountryChange}
+              onSelect={(country) => setFormData({ ...formData, country })}
               placeholder="Select country"
-              icon={selectedCountry?.flag}
             />
-
             <Select
               label="City of Residence"
               value={formData.city}
@@ -174,10 +221,14 @@ const ProfileEditScreen = ({ navigation }) => {
           </View>
         </ScrollView>
 
-  
-        <View style={styles.bottomSection}>
-          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-            <Text style={styles.saveButtonText}>Save</Text>
+        <View style={[styles.bottomSection, { borderTopColor: theme.border }]}>
+          <TouchableOpacity
+            style={[styles.saveButton, { backgroundColor: theme.primary }]}
+            onPress={handleSave}
+          >
+            <Text style={[styles.saveButtonText, { color: "#FFFFFF" }]}>
+              Save
+            </Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -188,7 +239,6 @@ const ProfileEditScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.white,
   },
   container: {
     flex: 1,
@@ -212,7 +262,7 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 120,
     height: 120,
-    borderRadius: 50,
+    borderRadius: 60, // Tam dairə olması üçün
     backgroundColor: "#F5F5F5",
   },
   editIconContainer: {
@@ -221,14 +271,9 @@ const styles = StyleSheet.create({
     right: 0,
     width: 30,
     height: 30,
-    // borderRadius: 16,
-    // backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
-    // borderWidth: 3,
-    // borderColor: "#FFF",
   },
-
 
   formContainer: {
     gap: 20,
@@ -238,17 +283,14 @@ const styles = StyleSheet.create({
   },
   label: {
     fontFamily: fontFamily.semiBold,
-    fontSize: 16, 
-    color: colors.text,
+    fontSize: 16,
   },
   input: {
     height: 55,
     paddingHorizontal: 20,
     fontFamily: fontFamily.regular,
-    fontSize: 16, 
-    color: colors.text,
+    fontSize: 16,
     borderRadius: 8,
-    backgroundColor: "#F2F2F2",
   },
 
   emailInput: {
@@ -257,37 +299,31 @@ const styles = StyleSheet.create({
     height: 55,
     paddingHorizontal: 20,
     borderRadius: 8,
-    backgroundColor: "#F2F2F2",
   },
   emailIcon: {
-    marginRight: 8,
+    marginRight: spacing.small,
   },
   emailTextInput: {
     flex: 1,
     fontFamily: fontFamily.regular,
-    fontSize: 16, 
-    color: colors.text,
+    fontSize: 16,
   },
 
   bottomSection: {
     paddingHorizontal: 24,
     paddingVertical: 16,
     borderTopWidth: 1,
-    borderTopColor: "#F0F0F0",
   },
   saveButton: {
     height: 55,
     borderRadius: 32,
-    backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
   },
   saveButtonText: {
     fontFamily: fontFamily.semiBold,
-    fontSize: 16, 
-    color: "#FFF",
+    fontSize: 16,
   },
 });
-
 
 export default ProfileEditScreen;

@@ -45,5 +45,50 @@
       "7": { "title": "7. Şartlarda Değişiklik", "body": "Bu Şartları zaman zaman güncelleyebiliriz. Değişikliklerden sonra kullanımı sürdürmek yeni Şartları kabul ettiğiniz anlamına gelir." },
       "8": { "title": "8. İletişim", "body": "Bu Şartlarla ilgili sorularınız varsa, lütfen support@tripsify.com adresinden bizimle iletişime geçin." }
     }
+  },
+  "login_form": {
+    "tabs": {
+      "phone": "Telefon Numarası",
+      "email": "E-posta"
+    },
+    "title": "Tekrar hoş geldin, değerli sürücü!🤗",
+    "description_phone": "Giriş yapmak için girdiğiniz cep telefonu numarasına bir sonraki aşamada doğrulama kodu gönderileceğini lütfen unutmayın.",
+    "description_email": "Giriş yapmak için girdiğiniz e-posta adresine bir sonraki aşamada doğrulama kodu gönderileceğini lütfen unutmayın.",
+    "placeholders": {
+      "phone": "Cep telefonu",
+      "email": "E-posta adresinizi girin"
+    },
+    "continue": "Devam et"
+  },
+  "help_support": {
+    "title": "Yardım ve Destek",
+    "faq": "Sıkça Sorulan Sorular",
+    "contact_support": "Destek ile İletişime Geçin",
+    "privacy_policy": "Gizlilik Politikası",
+    "terms_of_service": "Kullanım Şartları",
+    "about_us": "Hakkımızda",
+    "rate_us": "Bizi Değerlendirin",
+    "visit_website": "Web Sitemizi Ziyaret Edin",
+    "social_media": "Bizi Sosyal Medyada Takip Edin"
+  },
+ "about_us": {
+    "title": "Hakkımızda",
+    "our_story_title": "Hikayemiz",
+    "our_story_text": "2023 yılında bir grup tutkulu gezgin tarafından kurulan Tripsify, basit bir fikirle başladı: turları keşfetmeyi ve rezervasyon yapmayı yolculuğun kendisi kadar sorunsuz hale getirmek. Karmaşık rezervasyon süreçlerinden bıkmıştık ve her gezginin mükemmel macerasını kolayca bulabileceği bir platform oluşturmak istedik.",
+    "values_title": "Değerlerimiz",
+    "values": {
+      "1": { "title": "Seçkin Deneyimler", "text": "Kalite ve özgünlüğü sağlamak için her tur ekibimiz tarafından özenle seçilir." },
+      "2": { "title": "En İyi Fiyat Garantisi", "text": "Maceralarınızda size rakipsiz fiyatlar sunmak için doğrudan sağlayıcılarla çalışıyoruz." },
+      "3": { "title": "Güvenlik ve Güven", "text": "Güvenliğiniz önceliğimizdir. Yalnızca doğrulanmış ve güvenilir tur operatörleriyle ortaklık yapıyoruz." }
+    },
+    "team_title": "Ekibimizle Tanışın",
+    "team_roles": {
+      "ceo": "CEO ve Kurucu",
+      "ops": "Operasyon Müdürü",
+      "dev": "Baş Geliştirici"
+    },
+    "connect_with_us": "Bizimle Bağlantı Kurun",
+    "terms": "Kullanım Şartları",
+    "privacy": "Gizlilik Politikası"
   }
 }

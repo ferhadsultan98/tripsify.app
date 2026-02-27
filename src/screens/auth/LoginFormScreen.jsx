@@ -8,22 +8,36 @@ import {
   KeyboardAvoidingView,
   Platform,
   Animated,
+  I18nManager,
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import ScreenHeader from '../../components/common/ScreenHeader';
 import PhoneInput from '../../components/common/PhoneInput';
 import EmailIcon from '../../../assets/images/email.svg';
-import { colors } from '../../styles/colors';
 import { spacing } from '../../styles/spacing';
 import { fontFamily } from '../../styles/fonts';
+import { useTheme } from '../../context/ThemeContext';
+
+// API Hooks
+import { authService } from '../../api/auth';
+import useApi from '../../hooks/useApi';
 
 const LoginFormScreen = ({ navigation }) => {
+  const { t } = useTranslation();
+  const { theme } = useTheme();
+
   const [activeTab, setActiveTab] = useState('phone');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [phoneCountryCode, setPhoneCountryCode] = useState('US');
+  const [phoneCountryCode, setPhoneCountryCode] = useState('1'); // Default US
   const [email, setEmail] = useState('');
   
   const slideAnim = useRef(new Animated.Value(0)).current;
+
+  // API Hook
+  const sendOtpApi = useApi(authService.sendOtp);
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -33,25 +47,47 @@ const LoginFormScreen = ({ navigation }) => {
     }).start();
   }, [activeTab]);
 
-  const handleContinue = () => {
-    if (activeTab === 'phone') {
-      navigation.navigate('VerificationCodeScreen', { 
-        phoneNumber: `+${phoneCountryCode} ${phoneNumber}`,
-        email: null,
-        method: 'phone',
-        currentStep: 2,
-        totalSteps: 2,
-        flow: 'login',
-      });
+  const handleContinue = async () => {
+    // 1. Validasiya
+    if (activeTab === 'email' && !email.trim()) {
+        Alert.alert("Error", "Please enter your email.");
+        return;
+    }
+    if (activeTab === 'phone' && !phoneNumber.trim()) {
+         Alert.alert("Error", "Please enter your phone number.");
+         return;
+    }
+
+    // 2. API Sorğusu (Sadece Email üçün dinamik edirik)
+    if (activeTab === 'email') {
+        const { data, error } = await sendOtpApi.request({ email });
+
+        if (data) {
+            // Uğurlu keçid
+            console.log("OTP Sent:", data);
+            navigation.navigate('VerificationCodeScreen', { 
+                email: email,
+                method: 'email',
+                currentStep: 2,
+                totalSteps: 2,
+                flow: 'login', // Login flow olduğunu bildiririk
+            });
+        }
+
+        if (error) {
+            console.error("Send OTP Error:", error);
+            Alert.alert("Error", error.error || "Failed to send OTP. User might not exist.");
+        }
     } else {
-      navigation.navigate('VerificationCodeScreen', { 
-        phoneNumber: null,
-        email,
-        method: 'email',
-        currentStep: 2,
-        totalSteps: 2,
-        flow: 'login', // ← MÜHİM
-      });
+        // Phone hissəsi hələlik statik qalır (backend hazır olanda bura da eyni məntiq tətbiq olunacaq)
+        navigation.navigate('VerificationCodeScreen', { 
+          phoneNumber: `+${phoneCountryCode} ${phoneNumber}`,
+          email: null,
+          method: 'phone',
+          currentStep: 2,
+          totalSteps: 2,
+          flow: 'login',
+        });
     }
   };
 
@@ -61,7 +97,7 @@ const LoginFormScreen = ({ navigation }) => {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -70,18 +106,18 @@ const LoginFormScreen = ({ navigation }) => {
           onBackPress={() => navigation.goBack()} 
           currentStep={1} 
           totalSteps={2}
-                  showProgress={true}
-
+          showProgress={true}
         />
 
         <View style={styles.content}>
           {/* Tabs */}
-          <View style={styles.tabContainer}>
+          <View style={[styles.tabContainer, { backgroundColor: theme.inputBg }]}>
             <Animated.View
               style={[
                 styles.indicator,
                 {
                   left: indicatorPosition,
+                  backgroundColor: theme.primary
                 },
               ]}
             />
@@ -92,10 +128,10 @@ const LoginFormScreen = ({ navigation }) => {
               <Text
                 style={[
                   styles.tabText,
-                  activeTab === 'phone' && styles.tabTextActive,
+                  { color: activeTab === 'phone' ? '#FFFFFF' : theme.textPrimary }
                 ]}
               >
-                Phone Number
+                {t('login_form.tabs.phone')}
               </Text>
             </TouchableOpacity>
 
@@ -106,22 +142,24 @@ const LoginFormScreen = ({ navigation }) => {
               <Text
                 style={[
                   styles.tabText,
-                  activeTab === 'email' && styles.tabTextActive,
+                  { color: activeTab === 'email' ? '#FFFFFF' : theme.textPrimary }
                 ]}
               >
-                E-mail
+                {t('login_form.tabs.email')}
               </Text>
             </TouchableOpacity>
           </View>
 
           {/* Title */}
-          <Text style={styles.title}>Welcome back, dear driver!🤗</Text>
+          <Text style={[styles.title, { color: theme.textPrimary }]}>
+            {t('login_form.title')}
+          </Text>
 
           {/* Description */}
-          <Text style={styles.description}>
+          <Text style={[styles.description, { color: theme.textSecondary }]}>
             {activeTab === 'phone'
-              ? 'Please note that a verification code will be sent to the mobile number you entered to log in at a later stage.'
-              : 'Please note that a verification code will be sent to the e-mail address you entered to log in at a later stage.'}
+              ? t('login_form.description_phone')
+              : t('login_form.description_email')}
           </Text>
 
           {/* Input */}
@@ -132,19 +170,20 @@ const LoginFormScreen = ({ navigation }) => {
                 onChangeText={setPhoneNumber}
                 countryCode={phoneCountryCode}
                 onCountryChange={setPhoneCountryCode}
-                placeholder="Mobile phone"
+                placeholder={t('login_form.placeholders.phone')}
               />
             ) : (
-              <View style={styles.emailInputWrapper}>
-                <EmailIcon width={20} height={20} fill={colors.textLight} />
+              <View style={[styles.emailInputWrapper, { backgroundColor: theme.inputBg }]}>
+                <EmailIcon width={20} height={20} fill={theme.textSecondary} />
                 <TextInput
-                  style={styles.emailInput}
-                  placeholder="Enter your e-mail address"
-                  placeholderTextColor={colors.textLight}
+                  style={[styles.emailInput, { color: theme.textPrimary }]}
+                  placeholder={t('login_form.placeholders.email')}
+                  placeholderTextColor={theme.textSecondary}
                   value={email}
                   onChangeText={setEmail}
                   keyboardType="email-address"
                   autoCapitalize="none"
+                  textAlign={I18nManager.isRTL ? 'right' : 'left'}
                 />
               </View>
             )}
@@ -152,10 +191,17 @@ const LoginFormScreen = ({ navigation }) => {
 
           {/* Bottom Button */}
           <TouchableOpacity
-            style={styles.continueButton}
+            style={[styles.continueButton, { backgroundColor: theme.primary }]}
             onPress={handleContinue}
+            disabled={sendOtpApi.loading}
           >
-            <Text style={styles.continueButtonText}>Continue</Text>
+            {sendOtpApi.loading ? (
+                <ActivityIndicator color="#FFF" />
+            ) : (
+                <Text style={[styles.continueButtonText, { color: '#FFFFFF' }]}>
+                    {t('login_form.continue')}
+                </Text>
+            )}
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -164,108 +210,21 @@ const LoginFormScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: spacing.medium,
-  },
-
-  /** TABS **/
-  tabContainer: {
-    flexDirection: 'row',
-    marginBottom: spacing.xlarge,
-    position: 'relative',
-    backgroundColor: '#F5F5F5',
-    borderRadius: 8,
-    height: 48,
-  },
-  indicator: {
-    position: 'absolute',
-    width: '50%',
-    height: '100%',
-    backgroundColor: colors.primary,
-    borderRadius: 8,
-    zIndex: 0,
-  },
-  tab: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1,
-  },
-  tabLeft: {
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-  },
-  tabRight: {
-    borderTopRightRadius: 8,
-    borderBottomRightRadius: 8,
-  },
-  tabText: {
-    fontFamily: fontFamily.semiBold,
-    fontSize: 14, 
-    color: colors.text,
-  },
-  tabTextActive: {
-    color: colors.white,
-  },
-
-  /** TITLE **/
-  title: {
-    fontFamily: fontFamily.bold,
-    fontSize: 28, 
-    color: colors.text,
-    marginBottom: spacing.medium,
-  },
-
-  /** DESCRIPTION **/
-  description: {
-    fontFamily: fontFamily.regular,
-    fontSize: 16, 
-    color: colors.textLight,
-    lineHeight: 22.4,
-    letterSpacing: 0.2,
-    marginBottom: spacing.xlarge,
-  },
-
-  /** INPUTS **/
-  inputWrapper: {
-    minHeight: 56,
-  },
-  emailInputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 55,
-    borderRadius: 8,
-    backgroundColor: "#F2F2F2",
-    paddingHorizontal: 20,
-    gap: 12,
-  },
-  emailInput: {
-    flex: 1,
-    fontFamily: fontFamily.regular,
-    fontSize: 16, 
-    color: colors.text,
-  },
-
-  /** BUTTON **/
-  continueButton: {
-    height: 55,
-    borderRadius: 25,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: spacing.xlarge,
-  },
-  continueButtonText: {
-    fontFamily: fontFamily.semiBold,
-    fontSize: 16, 
-    color: colors.white,
-  },
+  container: { flex: 1 },
+  content: { flex: 1, paddingHorizontal: 24, paddingTop: spacing.medium },
+  tabContainer: { flexDirection: 'row', marginBottom: spacing.xlarge, position: 'relative', borderRadius: 8, height: 48 },
+  indicator: { position: 'absolute', width: '50%', height: '100%', borderRadius: 8, zIndex: 0 },
+  tab: { flex: 1, justifyContent: 'center', alignItems: 'center', zIndex: 1 },
+  tabLeft: { borderTopLeftRadius: 8, borderBottomLeftRadius: 8 },
+  tabRight: { borderTopRightRadius: 8, borderBottomRightRadius: 8 },
+  tabText: { fontFamily: fontFamily.semiBold, fontSize: 14 },
+  title: { fontFamily: fontFamily.bold, fontSize: 28, marginBottom: spacing.medium, textAlign: 'left' },
+  description: { fontFamily: fontFamily.regular, fontSize: 16, lineHeight: 22.4, letterSpacing: 0.2, marginBottom: spacing.xlarge, textAlign: 'left' },
+  inputWrapper: { minHeight: 56 },
+  emailInputWrapper: { flexDirection: 'row', alignItems: 'center', height: 55, borderRadius: 8, paddingHorizontal: 20, gap: 12 },
+  emailInput: { flex: 1, fontFamily: fontFamily.regular, fontSize: 16 },
+  continueButton: { height: 55, borderRadius: 25, justifyContent: 'center', alignItems: 'center', marginTop: spacing.xlarge },
+  continueButtonText: { fontFamily: fontFamily.semiBold, fontSize: 16 },
 });
-
 
 export default LoginFormScreen;

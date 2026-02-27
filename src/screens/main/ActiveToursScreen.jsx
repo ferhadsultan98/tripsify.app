@@ -25,6 +25,7 @@ import EmptyState from "./EmptyState";
 import { activeTours } from "../../data/toursData";
 import { colors } from "../../styles/colors";
 import { fontFamily } from "../../styles/fonts";
+import { useTheme } from "../../context/ThemeContext"; // Theme Hook
 
 if (
   Platform.OS === "android" &&
@@ -34,6 +35,7 @@ if (
 }
 
 const ActiveToursScreen = ({ navigation }) => {
+  const { theme } = useTheme(); // Theme Hook
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [tours, setTours] = useState(activeTours || []);
@@ -44,9 +46,11 @@ const ActiveToursScreen = ({ navigation }) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setSearchVisible(!searchVisible);
   };
-const handleCardPress = (tour) => {
+  
+  const handleCardPress = (tour) => {
     navigation.navigate("TourDetailScreen", { tour });
   };
+
   const handleRequestPress = (tour) => {
     setSelectedTour(tour);
     setModalVisible(true);
@@ -65,22 +69,23 @@ const handleCardPress = (tour) => {
     "Active Tours";
 
   return (
-    <SafeAreaView style={styles.container}>
+    // SafeAreaView fon rəngi dinamik
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.header}>
         <LogoIcon width={32} height={32} />
-        <Text style={styles.headerTitle}>{currentRoute}</Text>
+        <Text style={[styles.headerTitle, { color: theme.textPrimary }]}>{currentRoute}</Text>
         <TouchableOpacity onPress={toggleSearch}>
-          <SearchIcon width={24} height={24} />
+          <SearchIcon width={24} height={24} fill={theme.iconColor} />
         </TouchableOpacity>
       </View>
 
       {searchVisible && (
-        <View style={styles.searchContainer}>
-          <SearchIcon width={20} height={20} fill="#9E9E9E" />
+        <View style={[styles.searchContainer, { backgroundColor: theme.inputBg }]}>
+          <SearchIcon width={20} height={20} fill={theme.textSecondary} />
           <TextInput
-            style={styles.searchInput}
+            style={[styles.searchInput, { color: theme.textPrimary }]}
             placeholder="Search destinations..."
-            placeholderTextColor="#9E9E9E"
+            placeholderTextColor={theme.textSecondary}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
@@ -99,68 +104,70 @@ const handleCardPress = (tour) => {
             <TouchableOpacity key={tour.id} style={styles.tourItem} onPress={() => handleCardPress(tour)}>
               <View style={styles.leftColumn}>
                 <PlaneIcon width={24} height={24} />
-                <View style={styles.verticalLine} />
+                <View style={[styles.verticalLine, { backgroundColor: theme.border }]} />
               </View>
 
               <View style={styles.rightColumn}>
-                <View style={styles.card}>
-                  <Text style={styles.cardTitle}>{tour.title}</Text>
+                <View style={[
+                    styles.card, 
+                    { backgroundColor: theme.cardBg, borderColor: theme.border }
+                ]}>
+                  <Text style={[styles.cardTitle, { color: theme.textPrimary }]}>{tour.title}</Text>
 
                   <View style={styles.infoItem}>
-                   
                     <PeriodIcon width={20} height={20} />
                     <View style={styles.infoContent}>
-                      <Text style={styles.infoLabel}>Period:</Text>
-                      <Text style={styles.infoValue}>{tour.period}</Text>
+                      <Text style={[styles.infoLabel, { color: theme.textPrimary }]}>Period:</Text>
+                      <Text style={[styles.infoValue, { color: theme.textSecondary }]}>{tour.period}</Text>
                     </View>
                   </View>
 
                   <View style={styles.infoItem}>
                     <CalendarIcon width={20} height={20} />
                     <View style={styles.infoContent}>
-                      <Text style={styles.infoLabel}>Working days:</Text>
-                      <Text style={styles.infoValue}>{tour.workingDays}</Text>
+                      <Text style={[styles.infoLabel, { color: theme.textPrimary }]}>Working days:</Text>
+                      <Text style={[styles.infoValue, { color: theme.textSecondary }]}>{tour.workingDays}</Text>
                     </View>
                   </View>
 
                   <View style={styles.infoItem}>
                     <PeopleIcon width={20} height={20} />
                     <View style={styles.infoContent}>
-                      <Text style={styles.infoLabel}>Pax:</Text>
-                      <Text style={styles.infoValue}>{tour.passengers}</Text>
+                      <Text style={[styles.infoLabel, { color: theme.textPrimary }]}>Pax:</Text>
+                      <Text style={[styles.infoValue, { color: theme.textSecondary }]}>{tour.passengers}</Text>
                     </View>
                   </View>
 
                   <View style={styles.infoItem}>
                     <CarIcon width={20} height={20} />
                     <View style={styles.infoContent}>
-                      <Text style={styles.infoLabel}>Car type:</Text>
-                      <Text style={styles.infoValue}>{tour.car}</Text>
+                      <Text style={[styles.infoLabel, { color: theme.textPrimary }]}>Car type:</Text>
+                      <Text style={[styles.infoValue, { color: theme.textSecondary }]}>{tour.car}</Text>
                     </View>
                   </View>
 
                   <View style={styles.infoItem}>
                     <CheckIcon width={20} height={20} />
                     <View style={styles.infoContent}>
-                      <Text style={styles.infoLabel}>Included:</Text>
-                      <Text style={styles.infoValue}>
+                      <Text style={[styles.infoLabel, { color: theme.textPrimary }]}>Included:</Text>
+                      <Text style={[styles.infoValue, { color: theme.textSecondary }]}>
                         {tour.included.join("\n")}
                       </Text>
-                      
                     </View>
                   </View>
 
                   <View style={styles.salaryContainer}>
-                    <SalaryIcon width={20} height={20} color={colors.primary} />
-                    <Text style={styles.salaryLabel}>Salary:</Text>
-                    <Text style={styles.salaryValue}>{tour.salary}</Text>
+                    <SalaryIcon width={20} height={20} color={theme.primary} />
+                    <Text style={[styles.salaryLabel, { color: theme.primary }]}>Salary:</Text>
+                    <Text style={[styles.salaryValue, { color: theme.primary }]}>{tour.salary}</Text>
                   </View>
                 </View>
 
                 <TouchableOpacity
                   style={[
                     styles.requestButton,
-                    tour.requestSent && styles.requestButtonDisabled,
+                    { backgroundColor: theme.primary },
+                    tour.requestSent && { backgroundColor: theme.inputBg }, // Disabled
                   ]}
                   disabled={tour.requestSent}
                   onPress={() => !tour.requestSent && handleRequestPress(tour)}
@@ -168,7 +175,8 @@ const handleCardPress = (tour) => {
                   <Text
                     style={[
                       styles.requestButtonText,
-                      tour.requestSent && styles.requestButtonTextDisabled,
+                      { color: '#FFFFFF' },
+                      tour.requestSent && { color: theme.textSecondary },
                     ]}
                   >
                     {tour.requestSent
@@ -189,23 +197,23 @@ const handleCardPress = (tour) => {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Are you sure?</Text>
-            <Text style={styles.modalSubtitle}>
+          <View style={[styles.modalContainer, { backgroundColor: theme.cardBg }]}>
+            <Text style={[styles.modalTitle, { color: theme.textPrimary }]}>Are you sure?</Text>
+            <Text style={[styles.modalSubtitle, { color: theme.textSecondary }]}>
               Do you want to send a request for this job?
             </Text>
             <View style={styles.modalButtons}>
               <TouchableOpacity
-                style={[styles.modalButton, styles.modalButtonNo]}
+                style={[styles.modalButton, styles.modalButtonNo, { backgroundColor: theme.inputBg }]}
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={styles.modalButtonTextNo}>No</Text>
+                <Text style={[styles.modalButtonTextNo, { color: theme.textPrimary }]}>No</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.modalButton, styles.modalButtonYes]}
+                style={[styles.modalButton, styles.modalButtonYes, { backgroundColor: theme.primary }]}
                 onPress={confirmRequest}
               >
-                <Text style={styles.modalButtonTextYes}>Yes, Send</Text>
+                <Text style={[styles.modalButtonTextYes, { color: '#FFFFFF' }]}>Yes, Send</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -218,7 +226,7 @@ const handleCardPress = (tour) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white, // Dinamik
   },
   header: {
     flexDirection: "row",
@@ -230,7 +238,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontFamily: fontFamily.bold,
     fontSize: 18,
-    color: "#000",
+    // color: "#000", // Dinamik
     flex: 1,
     textAlign: "center",
     marginHorizontal: 16,
@@ -242,7 +250,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 16,
     height: 48,
-    backgroundColor: "#F5F5F5",
+    // backgroundColor: "#F5F5F5", // Dinamik
     borderRadius: 12,
     gap: 12,
   },
@@ -250,7 +258,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: "#000",
+    // color: "#000", // Dinamik
   },
   scrollView: {
     flex: 1,
@@ -271,7 +279,7 @@ const styles = StyleSheet.create({
   verticalLine: {
     width: 2,
     flex: 1,
-    backgroundColor: "#E0E0E0",
+    // backgroundColor: "#E0E0E0", // Dinamik
     marginTop: 8,
   },
   rightColumn: {
@@ -283,13 +291,13 @@ const styles = StyleSheet.create({
     gap: 16,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#EEE",
-    backgroundColor: "#FFF",
+    // borderColor: "#EEE", // Dinamik
+    // backgroundColor: "#FFF", // Dinamik
   },
   cardTitle: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: "#000",
+    // color: "#000", // Dinamik
   },
   infoItem: {
     flexDirection: "row",
@@ -301,13 +309,13 @@ const styles = StyleSheet.create({
   infoLabel: {
     fontFamily: fontFamily.bold,
     fontSize: 16,
-    color: "#000",
+    // color: "#000", // Dinamik
     marginBottom: 2,
   },
   infoValue: {
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: "#757575",
+    // color: "#757575", // Dinamik
     lineHeight: 20,
   },
   salaryContainer: {
@@ -318,30 +326,30 @@ const styles = StyleSheet.create({
   salaryLabel: {
     fontFamily: fontFamily.bold,
     fontSize: 16,
-    color: "#8D62D7",
+    // color: "#8D62D7", // Dinamik
   },
   salaryValue: {
     fontFamily: fontFamily.bold,
     fontSize: 16,
-    color: "#8D62D7",
+    // color: "#8D62D7", // Dinamik
   },
   requestButton: {
     height: 55,
     borderRadius: 12,
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary, // Dinamik
     justifyContent: "center",
     alignItems: "center",
   },
   requestButtonDisabled: {
-    backgroundColor: "#F5F5F5",
+    // backgroundColor: "#F5F5F5", // Dinamik
   },
   requestButtonText: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: "#FFF",
+    // color: "#FFF", // Dinamik
   },
   requestButtonTextDisabled: {
-    color: "#757575",
+    // color: "#757575", // Dinamik
   },
   modalOverlay: {
     flex: 1,
@@ -349,7 +357,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   modalContainer: {
-    backgroundColor: "white",
+    // backgroundColor: "white", // Dinamik
     padding: 24,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -359,13 +367,13 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.bold,
     fontSize: 20,
     textAlign: "center",
-    color: "#000",
+    // color: "#000", // Dinamik
   },
   modalSubtitle: {
     fontFamily: fontFamily.regular,
     fontSize: 16,
     textAlign: "center",
-    color: "#757575",
+    // color: "#757575", // Dinamik
     marginBottom: 16,
   },
   modalButtons: {
@@ -380,20 +388,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalButtonNo: {
-    backgroundColor: "#F5F5F5",
+    // backgroundColor: "#F5F5F5", // Dinamik
   },
   modalButtonYes: {
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary, // Dinamik
   },
   modalButtonTextNo: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: "#000",
+    // color: "#000", // Dinamik
   },
   modalButtonTextYes: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: "#FFF",
+    // color: "#FFF", // Dinamik
   },
 });
 

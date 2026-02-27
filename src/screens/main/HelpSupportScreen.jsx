@@ -6,68 +6,74 @@ import {
   StyleSheet,
   ScrollView,
   Linking,
+  I18nManager,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTranslation } from "react-i18next";
 import ScreenHeader from "../../components/common/ScreenHeader";
 import ChevronRightIcon from "../../../assets/images/rightIcon.svg";
 import { colors } from "../../styles/colors";
 import { fontFamily } from "../../styles/fonts";
+import { useTheme } from "../../context/ThemeContext"; // Theme Hook
 
 const HelpSupportScreen = ({ navigation }) => {
+  const { t } = useTranslation(); // Hook
+  const { theme } = useTheme(); // Theme Hook
+
   const options = [
     {
       id: 1,
-      title: "FAQ",
+      title: t('help_support.faq') || "FAQ",
       onPress: () => navigation.navigate("FAQScreen"),
     },
     {
       id: 2,
-      title: "Contact Support",
+      title: t('help_support.contact_support') || "Contact Support",
       onPress: () => navigation.navigate("ContactSupportScreen"),
     },
     {
       id: 3,
-      title: "Privacy Policy",
+      title: t('help_support.privacy_policy') || "Privacy Policy",
       onPress: () => navigation.navigate("PrivacyPolicy"),
     },
     {
       id: 4,
-      title: "Terms of Service",
+      title: t('help_support.terms_of_service') || "Terms of Service",
       onPress: () => navigation.navigate("TermsOfService"),
     },
     {
       id: 5,
-      title: "About us",
-      onPress: () => navigation.navigate("AboutUsScreen"),
+      title: t('help_support.about_us') || "About us",
+      onPress: () => navigation.navigate("AboutUsScreen"), 
     },
     {
       id: 6,
-      title: "Rate us",
+      title: t('help_support.rate_us') || "Rate us",
       onPress: () => {
-        // Google Play / App Store link
         const url = "https://play.google.com/store/apps/details?id=com.tripsify";
-        Linking.openURL(url);
+        Linking.openURL(url).catch(err => console.error("Error opening link", err));
       },
     },
     {
       id: 7,
-      title: "Visit Our Website",
+      title: t('help_support.visit_website') || "Visit Our Website",
       onPress: () => {
         Linking.openURL("https://tripsify.com");
       },
     },
     {
       id: 8,
-      title: "Follow us on Social Media",
-      onPress: () => navigation.navigate("SocialMediaScreen"),
+      title: t('help_support.social_media') || "Follow us on Social Media",
+      onPress: () => navigation.navigate("SocialMediaScreen"), 
     },
   ];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    // SafeAreaView fon rəngi dinamik
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
       <View style={styles.container}>
         <ScreenHeader
-          title="Help & Support"
+          title={t('help_support.title') || "Help & Support"}
           onBackPress={() => navigation.goBack()}
           showProgress={false}
         />
@@ -83,8 +89,13 @@ const HelpSupportScreen = ({ navigation }) => {
               style={styles.optionRow}
               onPress={option.onPress}
             >
-              <Text style={styles.optionText}>{option.title}</Text>
-              <ChevronRightIcon width={20} height={20} fill="#000" />
+              <Text style={[styles.optionText, { color: theme.textPrimary }]}>{option.title}</Text>
+              <ChevronRightIcon 
+                width={20} 
+                height={20} 
+                fill={theme.iconColor} 
+                style={{ transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }] }} 
+              />
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -96,35 +107,31 @@ const HelpSupportScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white, // Dinamik
   },
-
   container: {
     flex: 1,
   },
-
   scrollView: {
     flex: 1,
   },
-
   scrollContent: {
     paddingHorizontal: 24,
     paddingTop: 24,
     paddingBottom: 100,
   },
-
   optionRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: 16,
   },
-
   optionText: {
     fontFamily: fontFamily.semiBold,
-    fontSize: 16,   // unchanged
+    fontSize: 16,
     fontWeight: "600",
-    color: "#000",
+    // color: "#000", // Dinamik
+    textAlign: 'left', 
   },
 });
 

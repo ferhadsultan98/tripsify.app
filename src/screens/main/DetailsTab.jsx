@@ -1,5 +1,3 @@
-// src/screens/tours/details/DetailsTab.jsx
-
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { colors } from "../../styles/colors";
@@ -18,47 +16,50 @@ import InfoIcon from "../../../assets/images/infoIcon.svg";
 import PassportIcon from "../../../assets/images/passportIcon.svg";
 import CallIcon from "../../../assets/images/callIcon-purple.svg";
 import WhatsAppIcon from "../../../assets/images/Whatsapp-purple2.svg";
+import { useTheme } from "../../context/ThemeContext"; // Theme Hook
 
-const DetailItem = ({ icon, children, isLast }) => (
+const DetailItem = ({ icon, children, isLast, theme }) => (
   <View style={styles.detailItem}>
     <View style={styles.leftColumn}>
       {icon}
-      <View style={styles.verticalLine} />
+      <View style={[styles.verticalLine, { backgroundColor: theme.border }]} />
     </View>
     <View style={styles.rightColumn}>{children}</View>
   </View>
 );
 
-const DetailCard = ({ label, value, children }) => (
-  <View style={styles.card}>
-    <Text style={styles.cardLabel}>{label}</Text>
-    {value && <Text style={styles.cardValue}>{value}</Text>}
+const DetailCard = ({ label, value, children, theme }) => (
+  <View style={[styles.card, { backgroundColor: theme.cardBg, borderColor: theme.border }]}>
+    <Text style={[styles.cardLabel, { color: theme.textSecondary, borderBottomColor: theme.border }]}>{label}</Text>
+    {value && <Text style={[styles.cardValue, { color: theme.textPrimary }]}>{value}</Text>}
     {children}
   </View>
 );
 
-const ActionButtons = () => (
-  <View style={styles.actionsContainer}>
+const ActionButtons = ({ theme }) => (
+  <View style={[styles.actionsContainer, { borderTopColor: theme.border }]}>
     <TouchableOpacity style={styles.actionBtn}>
-      <InfoIcon />
-      <Text style={styles.actionText}>Info</Text>
+      <InfoIcon width={24} height={24} fill={theme.textPrimary} />
+      <Text style={[styles.actionText, { color: theme.textPrimary }]}>Info</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.actionBtn}>
-      <PassportIcon />
-      <Text style={styles.actionText}>Passport</Text>
+      <PassportIcon width={24} height={24} fill={theme.textPrimary} />
+      <Text style={[styles.actionText, { color: theme.textPrimary }]}>Passport</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.actionBtn}>
-      <CallIcon />
-      <Text style={{ color: colors.primary }}>Call</Text>
+      <CallIcon width={24} height={24} />
+      <Text style={{ color: theme.primary }}>Call</Text>
     </TouchableOpacity> 
     <TouchableOpacity style={styles.actionBtn}>
-      <WhatsAppIcon />
-      <Text style={{ color: colors.primary }}>WhatsApp</Text>
+      <WhatsAppIcon width={24} height={24} />
+      <Text style={{ color: theme.primary }}>WhatsApp</Text>
     </TouchableOpacity>
   </View>
 );
 
 const DetailsTab = ({ tour }) => {
+  const { theme } = useTheme(); // Theme Hook
+
   const tourDetails = [
     {
       id: "guest",
@@ -67,8 +68,9 @@ const DetailsTab = ({ tour }) => {
         <DetailCard
           label="Lead Guest Informations"
           value={tour.guestName || "Rashed Mohamed Almarzooqi"}
+          theme={theme}
         >
-          <ActionButtons />
+          <ActionButtons theme={theme} />
         </DetailCard>
       ),
     },
@@ -82,25 +84,26 @@ const DetailsTab = ({ tour }) => {
             tour.note ||
             "Guests are coming to honeymoon and you need to welcome them with a bouquet of flowers."
           }
+          theme={theme}
         />
       ),
     },
     {
       id: "period",
       icon: <PeriodIcon width={24} height={24} />,
-      Card: () => <DetailCard label="Period" value={tour.period} />,
+      Card: () => <DetailCard label="Period" value={tour.period} theme={theme} />,
     },
     {
       id: "days",
       icon: <CalendarIcon width={24} height={24} />,
       Card: () => (
-        <DetailCard label="Total Working Days" value={tour.workingDays} />
+        <DetailCard label="Total Working Days" value={tour.workingDays} theme={theme} />
       ),
     },
     {
       id: "pax",
       icon: <PeopleIcon width={24} height={24} />,
-      Card: () => <DetailCard label="Passengers" value={tour.passengers} />,
+      Card: () => <DetailCard label="Passengers" value={tour.passengers} theme={theme} />,
     },
     {
       id: "countries",
@@ -113,6 +116,7 @@ const DetailsTab = ({ tour }) => {
               ? tour.countries.join(", ")
               : "Austria 🇦🇹, France 🇫🇷, Switzerland 🇨🇭"
           }
+          theme={theme}
         />
       ),
     },
@@ -125,6 +129,7 @@ const DetailsTab = ({ tour }) => {
           value={
             Array.isArray(tour.included) ? tour.included.join("\n") : "N/A"
           }
+          theme={theme}
         />
       ),
     },
@@ -139,13 +144,14 @@ const DetailsTab = ({ tour }) => {
               ? tour.not_included.join("\n")
               : "N/A"
           }
+          theme={theme}
         />
       ),
     },
     {
       id: "salary",
       icon: <SalaryIcon width={24} height={24} />,
-      Card: () => <DetailCard label="Salary" value={tour.salary} />,
+      Card: () => <DetailCard label="Salary" value={tour.salary} theme={theme} />,
     },
     {
       id: "driver",
@@ -154,8 +160,9 @@ const DetailsTab = ({ tour }) => {
         <DetailCard
           label="Driver Information"
           value={tour.driverName || "Vugar Alishov"}
+          theme={theme}
         >
-          <ActionButtons />
+          <ActionButtons theme={theme} />
         </DetailCard>
       ),
     },
@@ -168,6 +175,7 @@ const DetailsTab = ({ tour }) => {
           key={item.id}
           icon={item.icon}
           isLast={index === tourDetails.length - 1}
+          theme={theme}
         >
           <item.Card />
         </DetailItem>
@@ -182,7 +190,7 @@ const styles = StyleSheet.create({
   verticalLine: {
     flex: 1,
     width: 1.5,
-    backgroundColor: "#E0E0E0",
+    // backgroundColor: "#E0E0E0", // Dinamik
     marginTop: 16,
   },
   rightColumn: { flex: 1 },
@@ -190,23 +198,23 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 8,
     alignSelf: "stretch",
-    backgroundColor: "white",
+    // backgroundColor: "white", // Dinamik
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#EEE",
+    // borderColor: "#EEE", // Dinamik
   },
   cardLabel: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: "#757575",
+    // color: "#757575", // Dinamik
     borderBottomWidth: 1,
-    borderBottomColor: "#F5F5F5",
+    // borderBottomColor: "#F5F5F5", // Dinamik
     paddingBottom: 15,
   },
   cardValue: {
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: colors.text,
+    // color: colors.text, // Dinamik
     lineHeight: 24,
   },
   actionsContainer: {
@@ -214,7 +222,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: "#F5F5F5",
+    // borderTopColor: "#F5F5F5", // Dinamik
     marginTop: 8,
     alignSelf: "stretch",
   },

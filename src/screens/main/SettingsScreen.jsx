@@ -9,6 +9,7 @@ import {
   Animated,
   Dimensions,
   TouchableWithoutFeedback,
+  I18nManager,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ScreenHeader from "../../components/common/ScreenHeader";
@@ -20,10 +21,12 @@ import HelpSupportIcon from "../../../assets/images/helpSupportIcon.svg";
 import LogoutIcon from "../../../assets/images/logoutIcon.svg";
 import ChevronRightIcon from "../../../assets/images/rightIcon.svg";
 import { colors } from "../../styles/colors";
+import { useTheme } from "../../context/ThemeContext"; // Theme Hook
 
 const { width } = Dimensions.get("window");
 
 const SettingsScreen = ({ navigation }) => {
+  const { theme } = useTheme(); // Theme Hook
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const settingsOptions = [
@@ -69,7 +72,8 @@ const SettingsScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    // SafeAreaView fon rəngi dinamik
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
       <View style={styles.container}>
         <ScreenHeader
           title="Settings"
@@ -92,10 +96,16 @@ const SettingsScreen = ({ navigation }) => {
                   onPress={option.onPress}
                 >
                   <View style={styles.optionLeft}>
-                    <IconComponent width={20} height={20} stroke="#000" fill="none" />
-                    <Text style={styles.optionText}>{option.title}</Text>
+                    {/* İkonların rəngini dinamik edirik */}
+                    <IconComponent width={20} height={20} stroke={theme.iconColor} fill="none" />
+                    <Text style={[styles.optionText, { color: theme.textPrimary }]}>{option.title}</Text>
                   </View>
-                  <ChevronRightIcon width={20} height={20} fill="#000" />
+                  <ChevronRightIcon 
+                    width={20} 
+                    height={20} 
+                    fill={theme.iconColor} 
+                    style={{ transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }] }}
+                  />
                 </TouchableOpacity>
               );
             })}
@@ -105,8 +115,8 @@ const SettingsScreen = ({ navigation }) => {
             style={styles.logoutRow}
             onPress={() => setShowLogoutModal(true)}
           >
-            <LogoutIcon width={20} height={20} fill="#FF3B30" stroke="none" />
-            <Text style={styles.logoutText}>Logout</Text>
+            <LogoutIcon width={20} height={20} fill={theme.error} stroke="none" />
+            <Text style={[styles.logoutText, { color: theme.error }]}>Logout</Text>
           </TouchableOpacity>
         </ScrollView>
 
@@ -114,13 +124,14 @@ const SettingsScreen = ({ navigation }) => {
           visible={showLogoutModal}
           onCancel={() => setShowLogoutModal(false)}
           onConfirm={handleLogout}
+          theme={theme} // Modala theme ötürürük
         />
       </View>
     </SafeAreaView>
   );
 };
 
-const LogoutModal = ({ visible, onCancel, onConfirm }) => {
+const LogoutModal = ({ visible, onCancel, onConfirm, theme }) => {
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
 
@@ -165,20 +176,29 @@ const LogoutModal = ({ visible, onCancel, onConfirm }) => {
             <Animated.View
               style={[
                 modalStyles.modalContainer,
-                { transform: [{ scale: scaleAnim }] },
+                { 
+                    transform: [{ scale: scaleAnim }],
+                    backgroundColor: theme.cardBg // Dinamik fon
+                },
               ]}
             >
-              <Text style={modalStyles.title}>Logout</Text>
-              <Text style={modalStyles.message}>
+              <Text style={[modalStyles.title, { color: theme.error }]}>Logout</Text>
+              <Text style={[modalStyles.message, { color: theme.textPrimary }]}>
                 Are you sure you want to log out?
               </Text>
 
               <View style={modalStyles.buttonContainer}>
-                <TouchableOpacity style={modalStyles.cancelButton} onPress={onCancel}>
-                  <Text style={modalStyles.cancelText}>Cancel</Text>
+                <TouchableOpacity 
+                    style={[modalStyles.cancelButton, { backgroundColor: theme.inputBg }]} 
+                    onPress={onCancel}
+                >
+                  <Text style={[modalStyles.cancelText, { color: theme.textSecondary }]}>Cancel</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={modalStyles.confirmButton} onPress={onConfirm}>
-                  <Text style={modalStyles.confirmText}>Yes, Logout</Text>
+                <TouchableOpacity 
+                    style={[modalStyles.confirmButton, { backgroundColor: theme.primary }]} 
+                    onPress={onConfirm}
+                >
+                  <Text style={[modalStyles.confirmText, { color: '#FFFFFF' }]}>Yes, Logout</Text>
                 </TouchableOpacity>
               </View>
             </Animated.View>
@@ -192,7 +212,7 @@ const LogoutModal = ({ visible, onCancel, onConfirm }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white, // Dinamik
   },
   container: {
     flex: 1,
@@ -223,7 +243,7 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#000",
+    // color: "#000", // Dinamik
   },
   logoutRow: {
     flexDirection: "row",
@@ -233,7 +253,7 @@ const styles = StyleSheet.create({
   logoutText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#FF3B30",
+    // color: "#FF3B30", // Dinamik
   },
 });
 
@@ -246,7 +266,7 @@ const modalStyles = StyleSheet.create({
   },
   modalContainer: {
     width: width * 0.85,
-    backgroundColor: "#FFF",
+    // backgroundColor: "#FFF", // Dinamik
     borderRadius: 20,
     padding: 24,
     alignItems: "center",
@@ -254,13 +274,13 @@ const modalStyles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "600",
-    color: "#FF3B30",
+    // color: "#FF3B30", // Dinamik
     marginBottom: 16,
   },
   message: {
     fontSize: 16,
     fontWeight: "400",
-    color: "#000",
+    // color: "#000", // Dinamik
     textAlign: "center",
     marginBottom: 24,
     lineHeight: 24,
@@ -274,27 +294,27 @@ const modalStyles = StyleSheet.create({
     flex: 1,
     height: 48,
     borderRadius: 24,
-    backgroundColor: "#F5F5F5",
+    // backgroundColor: "#F5F5F5", // Dinamik
     justifyContent: "center",
     alignItems: "center",
   },
   cancelText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#757575",
+    // color: "#757575", // Dinamik
   },
   confirmButton: {
     flex: 1,
     height: 48,
     borderRadius: 24,
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary, // Dinamik
     justifyContent: "center",
     alignItems: "center",
   },
   confirmText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#FFF",
+    // color: "#FFF", // Dinamik
   },
 });
 

@@ -1,15 +1,20 @@
-// Font family-lər (Uni Sans)
 export const fontFamily = {
-  regular: 'Uni Sans Regular',
-  book: 'Uni Sans Book',
-  light: 'Uni Sans Light',
-  thin: 'Uni Sans Thin',
-  semiBold: 'Uni Sans SemiBold',
-  bold: 'Uni Sans Bold',
-  heavy: 'Uni Sans Heavy',
+  regular: 'PlusJakartaSans-Regular',
+  italic: 'PlusJakartaSans-Italic',
+  light: 'PlusJakartaSans-Light',
+  lightItalic: 'PlusJakartaSans-LightItalic',
+  extraLight: 'PlusJakartaSans-ExtraLight',
+  extraLightItalic: 'PlusJakartaSans-ExtraLightItalic',
+  medium: 'PlusJakartaSans-Medium',
+  mediumItalic: 'PlusJakartaSans-MediumItalic',
+  semiBold: 'PlusJakartaSans-SemiBold',
+  semiBoldItalic: 'PlusJakartaSans-SemiBoldItalic',
+  bold: 'PlusJakartaSans-Bold',
+  boldItalic: 'PlusJakartaSans-BoldItalic',
+  extraBold: 'PlusJakartaSans-ExtraBold',
+  extraBoldItalic: 'PlusJakartaSans-ExtraBoldItalic',
 };
 
-// Font size-ları (köhnə fonts.js-də olduğu kimi)
 export const fontSize = {
   title: 28,
   heading: 18,
@@ -18,7 +23,6 @@ export const fontSize = {
   tiny: 12,
 };
 
-// Birləşdirilmiş export (rahat istifadə üçün)
 export const fonts = {
   family: fontFamily,
   size: fontSize,

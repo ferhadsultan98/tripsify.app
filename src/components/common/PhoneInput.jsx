@@ -10,10 +10,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { countries } from "../../data/countries";
-import { colors } from "../../styles/colors";
 import { spacing } from "../../styles/spacing";
 import { fontFamily } from "../../styles/fonts";
 import DownArrowIcon from "../../../assets/images/downArrowIcon.svg";
+import { useTheme } from "../../context/ThemeContext"; 
 
 const PhoneInput = ({
   label,
@@ -24,37 +24,42 @@ const PhoneInput = ({
   error,
 }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const { theme } = useTheme(); 
 
   const selectedCountry =
     countries.find((c) => c.code === countryCode) || countries[0];
 
   return (
     <View style={styles.container}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <Text style={[styles.label, { color: theme.textPrimary }]}>{label}</Text>}
 
       <View style={styles.phoneWrapper}>
         <TouchableOpacity
-          style={styles.countryButton}
+          style={[styles.countryButton, { backgroundColor: theme.inputBg }]}
           onPress={() => setModalVisible(true)}
         >
           <Text style={styles.flag}>{selectedCountry.flag}</Text>
-          <Text style={styles.dialCode}>{selectedCountry.dialCode}</Text>
-          <Text style={styles.dropdownIcon}>
+          <Text style={[styles.dialCode, { color: theme.textPrimary }]}>{selectedCountry.dialCode}</Text>
+          <Text style={[styles.dropdownIcon, { color: theme.textSecondary }]}>
             <DownArrowIcon />
           </Text>
         </TouchableOpacity>
 
         <TextInput
-          style={[styles.input, error && styles.inputError]}
+          style={[
+             styles.input, 
+             { backgroundColor: theme.inputBg, color: theme.textPrimary },
+             error && { borderColor: theme.error, borderWidth: 1 } 
+          ]}
           placeholder="Mobile phone"
-          placeholderTextColor={colors.textLight}
+          placeholderTextColor={theme.textSecondary}
           keyboardType="phone-pad"
           value={value}
           onChangeText={onChangeText}
         />
       </View>
 
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && <Text style={[styles.errorText, { color: theme.error }]}>{error}</Text>}
 
       <Modal
         visible={modalVisible}
@@ -63,11 +68,11 @@ const PhoneInput = ({
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalOverlay}>
-          <SafeAreaView style={styles.modalContainer}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Select Country Code</Text>
+          <SafeAreaView style={[styles.modalContainer, { backgroundColor: theme.cardBg }]}>
+            <View style={[styles.modalHeader, { borderBottomColor: theme.border }]}>
+              <Text style={[styles.modalTitle, { color: theme.textPrimary }]}>Select Country Code</Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <Text style={styles.closeButton}>✕</Text>
+                <Text style={[styles.closeButton, { color: theme.textSecondary }]}>✕</Text>
               </TouchableOpacity>
             </View>
 
@@ -78,7 +83,10 @@ const PhoneInput = ({
                 <TouchableOpacity
                   style={[
                     styles.countryItem,
-                    countryCode === item.code && styles.countryItemSelected,
+                    { borderBottomColor: theme.border },
+                    countryCode === item.code && { 
+                        backgroundColor: theme.mode === 'dark' ? '#2C2C2C' : '#F5F0FF' 
+                    },
                   ]}
                   onPress={() => {
                     onCountryChange(item.code);
@@ -86,10 +94,10 @@ const PhoneInput = ({
                   }}
                 >
                   <Text style={styles.countryFlag}>{item.flag}</Text>
-                  <Text style={styles.countryName}>{item.name}</Text>
-                  <Text style={styles.countryDialCode}>{item.dialCode}</Text>
+                  <Text style={[styles.countryName, { color: theme.textPrimary }]}>{item.name}</Text>
+                  <Text style={[styles.countryDialCode, { color: theme.textSecondary }]}>{item.dialCode}</Text>
                   {countryCode === item.code && (
-                    <Text style={styles.checkmark}>✓</Text>
+                    <Text style={[styles.checkmark, { color: theme.primary }]}>✓</Text>
                   )}
                 </TouchableOpacity>
               )}
@@ -109,8 +117,8 @@ const styles = StyleSheet.create({
   /** LABEL **/
   label: {
     fontFamily: fontFamily.semiBold,
-    fontSize: 16, // unchanged
-    color: colors.text,
+    fontSize: 16,
+    // color: colors.text, // Dinamik
     marginBottom: spacing.small,
   },
 
@@ -124,10 +132,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     height: 55,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     gap: 6,
     borderRadius: 8,
-    backgroundColor: "#F2F2F2",
+    // backgroundColor: "#F2F2F2", // Dinamik
   },
   flag: {
     fontFamily: fontFamily.regular,
@@ -136,12 +144,12 @@ const styles = StyleSheet.create({
   dialCode: {
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: colors.text,
+    // color: colors.text, // Dinamik
   },
   dropdownIcon: {
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: colors.textLight,
+    // color: colors.textLight, // Dinamik
   },
 
   /** PHONE INPUT **/
@@ -149,21 +157,21 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 55,
     borderRadius: 8,
-    backgroundColor: "#F2F2F2",
-    paddingHorizontal: 20,
+    // backgroundColor: "#F2F2F2", // Dinamik
+    paddingHorizontal: 10,
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: colors.text,
+    // color: colors.text, // Dinamik
   },
   inputError: {
-    borderColor: colors.error,
+    // borderColor: colors.error, // Dinamik olaraq inline verilir
   },
 
   /** ERROR TEXT **/
   errorText: {
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: colors.error,
+    // color: colors.error, // Dinamik
     marginTop: 4,
   },
 
@@ -174,7 +182,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   modalContainer: {
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white, // Dinamik
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: "70%",
@@ -187,17 +195,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.horizontal,
     paddingVertical: spacing.medium,
     borderBottomWidth: 1,
-    borderBottomColor: "#F0F0F0",
+    // borderBottomColor: "#F0F0F0", // Dinamik
   },
   modalTitle: {
     fontFamily: fontFamily.bold,
     fontSize: 16,
-    color: colors.text,
+    // color: colors.text, // Dinamik
   },
   closeButton: {
     fontFamily: fontFamily.regular,
     fontSize: 24,
-    color: colors.textLight,
+    // color: colors.textLight, // Dinamik
   },
 
   /** OPTIONS LIST **/
@@ -207,10 +215,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.horizontal,
     paddingVertical: spacing.medium,
     borderBottomWidth: 1,
-    borderBottomColor: "#F5F5F5",
+    // borderBottomColor: "#F5F5F5", // Dinamik
   },
   countryItemSelected: {
-    backgroundColor: "#F5F0FF",
+    // backgroundColor: "#F5F0FF", // Dinamik
   },
   countryFlag: {
     fontFamily: fontFamily.regular,
@@ -221,18 +229,18 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: colors.text,
+    // color: colors.text, // Dinamik
   },
   countryDialCode: {
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: colors.textLight,
+    // color: colors.textLight, // Dinamik
     marginRight: spacing.small,
   },
   checkmark: {
     fontFamily: fontFamily.bold,
     fontSize: 16,
-    color: colors.primary,
+    // color: colors.primary, // Dinamik
   },
 });
 

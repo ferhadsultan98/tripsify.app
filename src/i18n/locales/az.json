@@ -9,7 +9,7 @@
   },
    "appearance_screen": {
     "title": "Tətbiq Görünüşü",
-    "theme": "Mövzu",
+    "theme": "Tema",
     "language": "Tətbiq Dili",
     "choose_theme": "Mövzu Seçin",
     "choose_language": "Dil Seçin",
@@ -45,5 +45,71 @@
       "7": { "title": "7. Şərtlərin Dəyişdirilməsi", "body": "Bu Şərtləri zaman-zaman yeniləyə bilərik. Dəyişikliklərdən sonra platformadan istifadəyə davam etmək yeni Şərtləri qəbul etdiyiniz deməkdir." },
       "8": { "title": "8. Bizimlə Əlaqə", "body": "Bu Şərtlərlə bağlı suallarınız varsa, lütfən support@tripsify.com ünvanı ilə əlaqə saxlayın." }
     }
+  },
+  "login_form": {
+    "tabs": {
+      "phone": "Telefon Nömrəsi",
+      "email": "E-poçt"
+    },
+    "title": "Xoş gəldin, əziz sürücü!🤗",
+    "description_phone": "Nəzərə alın ki, giriş etmək üçün daxil etdiyiniz mobil nömrəyə növbəti mərhələdə təsdiq kodu göndəriləcək.",
+    "description_email": "Nəzərə alın ki, giriş etmək üçün daxil etdiyiniz e-poçt ünvanına növbəti mərhələdə təsdiq kodu göndəriləcək.",
+    "placeholders": {
+      "phone": "Mobil nömrə",
+      "email": "E-poçt ünvanınızı daxil edin"
+    },
+    "continue": "Davam et"
+  },
+  "help_support": {
+    "title": "Kömək və Dəstək",
+    "faq": "Tez-tez verilən suallar",
+    "contact_support": "Dəstək xidməti ilə əlaqə",
+    "privacy_policy": "Məxfilik siyasəti",
+    "terms_of_service": "İstifadə şərtləri",
+    "about_us": "Haqqımızda",
+    "rate_us": "Bizi qiymətləndirin",
+    "visit_website": "Veb-saytımızı ziyarət edin",
+    "social_media": "Bizi sosial mediada izləyin"
+  },
+ "about_us": {
+    "title": "Haqqımızda",
+    "our_story_title": "Hekayəmiz",
+    "our_story_text": "2023-cü ildə bir qrup səyahət həvəskarı tərəfindən təsis edilən Tripsify, sadə bir ideya ilə başladı: turların kəşfi və bron edilməsini səyahətin özü qədər rahat etmək. Mürəkkəb bron proseslərindən yorulmuşduq və hər bir səyahətçinin öz mükəmməl macərasını asanlıqla tapa biləcəyi bir platforma yaratmaq istədik.",
+    "values_title": "Dəyərlərimiz",
+    "values": {
+      "1": { "title": "Seçilmiş Təcrübələr", "text": "Keyfiyyət və orijinallığı təmin etmək üçün hər bir tur komandamız tərəfindən diqqətlə seçilir." },
+      "2": { "title": "Ən Yaxşı Qiymət Zəmanəti", "text": "Macəralarınız üçün ən sərfəli qiymətləri təklif etmək məqsədilə birbaşa təminatçılarla işləyirik." },
+      "3": { "title": "Təhlükəsizlik və Etibar", "text": "Sizin təhlükəsizliyiniz bizim prioritetimizdir. Yalnız yoxlanılmış və etibarlı tur operatorları ilə əməkdaşlıq edirik." }
+    },
+    "team_title": "Komandamız",
+    "team_roles": {
+      "ceo": "CEO və Təsisçi",
+      "ops": "Əməliyyatlar Rəhbəri",
+      "dev": "Baş Proqramçı"
+    },
+    "connect_with_us": "Bizimlə əlaqə saxlayın",
+    "terms": "İstifadə Şərtləri",
+    "privacy": "Məxfilik Siyasəti"
+  },
+  "security": {
+    "title": "Hesab və Təhlükəsizlik",
+    "two_step_verification": "İki Mərhələli Doğrulama",
+    "sms_authenticator": "SMS Doğrulama",
+    "google_authenticator": "Google Authenticator",
+    "biometric": "Biometrik",
+    "biometric_id": "Barmaq İzi",
+    "face_id": "Üz Tanıma (Face ID)",
+    "biometric_prompt": "Biometriki aktivləşdirmək üçün şəxsiyyətinizi təsdiqləyin",
+    "account": "Hesab",
+    "device_management": "Cihazların İdarə Edilməsi",
+    "deactivate_account": "Hesabı Deaktiv Et",
+    "delete_account": "Hesabı Sil",
+    "deactivate_title": "Hesabı Deaktiv Et",
+    "deactivate_subtitle": "Hesabınızı deaktiv etmək istədiyinizə əminsiniz? İstənilən vaxt yenidən aktivləşdirə bilərsiniz.",
+    "deactivate_confirm": "Deaktiv et",
+    "delete_title": "Hesabı Sil",
+    "delete_subtitle": "Bu daimi bir əməliyyatdır və geri qaytarıla bilməz. Hesabınızı silmək istədiyinizə əminsiniz?",
+    "delete_confirm": "Sil",
+    "cancel": "Ləğv et"
   }
 }

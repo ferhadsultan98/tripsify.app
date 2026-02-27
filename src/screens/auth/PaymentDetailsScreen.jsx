@@ -12,11 +12,12 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import ScreenHeader from "../../components/common/ScreenHeader";
 import Select from "../../components/common/Select";
-import { colors } from "../../styles/colors";
 import { spacing } from "../../styles/spacing";
 import { fontFamily } from "../../styles/fonts";
+import { useTheme } from "../../context/ThemeContext"; // Theme Hook
 
 const PaymentDetailsScreen = ({ navigation }) => {
+  const { theme } = useTheme(); // Theme Hook
   const [billingType, setBillingType] = useState("");
   const [address, setAddress] = useState("");
   const [accountHolderName, setAccountHolderName] = useState("");
@@ -31,7 +32,6 @@ const PaymentDetailsScreen = ({ navigation }) => {
 
   const validateForm = () => {
     const newErrors = {};
-
     if (!billingType) newErrors.billingType = "Billing type is required";
     if (!accountHolderName.trim())
       newErrors.accountHolderName = "Account holder name is required";
@@ -49,7 +49,8 @@ const PaymentDetailsScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
+    // SafeAreaView fon rəngi dinamik
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -65,8 +66,8 @@ const PaymentDetailsScreen = ({ navigation }) => {
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
         >
-          <Text style={styles.title}>Payment details</Text>
-          <Text style={styles.subtitle}>
+          <Text style={[styles.title, { color: theme.textPrimary }]}>Payment details</Text>
+          <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
             We need your payment details to pay you.
           </Text>
 
@@ -81,82 +82,97 @@ const PaymentDetailsScreen = ({ navigation }) => {
           />
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Address</Text>
+            <Text style={[styles.label, { color: theme.textPrimary }]}>Address</Text>
             <TextInput
-              style={styles.input}
+              style={[
+                  styles.input, 
+                  { 
+                      backgroundColor: theme.inputBg, 
+                      color: theme.textPrimary 
+                  }
+              ]}
               placeholder="Address"
-              placeholderTextColor={colors.textLight}
+              placeholderTextColor={theme.textSecondary}
               value={address}
               onChangeText={setAddress}
             />
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>
-              Bank account holder name <Text style={styles.required}>*</Text>
+            <Text style={[styles.label, { color: theme.textPrimary }]}>
+              Bank account holder name <Text style={[styles.required, { color: theme.error }]}>*</Text>
             </Text>
             <TextInput
               style={[
                 styles.input,
-                errors.accountHolderName && styles.inputError,
+                { backgroundColor: theme.inputBg, color: theme.textPrimary },
+                errors.accountHolderName && { borderColor: theme.error, borderWidth: 1 },
               ]}
               placeholder="ABC Transportation Ltd / John Doe"
-              placeholderTextColor={colors.textLight}
+              placeholderTextColor={theme.textSecondary}
               value={accountHolderName}
               onChangeText={setAccountHolderName}
             />
-            <Text style={styles.helperText}>
+            <Text style={[styles.helperText, { color: theme.textSecondary }]}>
               Bank account holder name, person or company
             </Text>
             {errors.accountHolderName && (
-              <Text style={styles.errorText}>{errors.accountHolderName}</Text>
+              <Text style={[styles.errorText, { color: theme.error }]}>{errors.accountHolderName}</Text>
             )}
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>
-              Bank account number <Text style={styles.required}>*</Text>
+            <Text style={[styles.label, { color: theme.textPrimary }]}>
+              Bank account number <Text style={[styles.required, { color: theme.error }]}>*</Text>
             </Text>
             <TextInput
-              style={[styles.input, errors.accountNumber && styles.inputError]}
+              style={[
+                  styles.input, 
+                  { backgroundColor: theme.inputBg, color: theme.textPrimary },
+                  errors.accountNumber && { borderColor: theme.error, borderWidth: 1 }
+              ]}
               placeholder="EE38 2200 2210 2014 5685"
-              placeholderTextColor={colors.textLight}
+              placeholderTextColor={theme.textSecondary}
               value={accountNumber}
               onChangeText={setAccountNumber}
               keyboardType="default"
             />
-            <Text style={styles.helperText}>
+            <Text style={[styles.helperText, { color: theme.textSecondary }]}>
               Your bank account number, in IBAN or other format
             </Text>
             {errors.accountNumber && (
-              <Text style={styles.errorText}>{errors.accountNumber}</Text>
+              <Text style={[styles.errorText, { color: theme.error }]}>{errors.accountNumber}</Text>
             )}
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>
-              Bank Name or BIC/SWIFT <Text style={styles.required}>*</Text>
+            <Text style={[styles.label, { color: theme.textPrimary }]}>
+              Bank Name or BIC/SWIFT <Text style={[styles.required, { color: theme.error }]}>*</Text>
             </Text>
             <TextInput
-              style={[styles.input, errors.bankName && styles.inputError]}
+              style={[
+                  styles.input, 
+                  { backgroundColor: theme.inputBg, color: theme.textPrimary },
+                  errors.bankName && { borderColor: theme.error, borderWidth: 1 }
+              ]}
               placeholder="HABALT22"
-              placeholderTextColor={colors.textLight}
+              placeholderTextColor={theme.textSecondary}
               value={bankName}
               onChangeText={setBankName}
             />
-            <Text style={styles.helperText}>If unknown, use bank's name</Text>
+            <Text style={[styles.helperText, { color: theme.textSecondary }]}>If unknown, use bank's name</Text>
             {errors.bankName && (
-              <Text style={styles.errorText}>{errors.bankName}</Text>
+              <Text style={[styles.errorText, { color: theme.error }]}>{errors.bankName}</Text>
             )}
           </View>
         </ScrollView>
 
-        <View style={styles.bottomSection}>
+        <View style={[styles.bottomSection, { borderTopColor: theme.border }]}>
           <TouchableOpacity
-            style={styles.continueButton}
+            style={[styles.continueButton, { backgroundColor: theme.primary }]}
             onPress={handleContinue}
           >
-            <Text style={styles.continueButtonText}>Continue</Text>
+            <Text style={[styles.continueButtonText, { color: '#FFFFFF' }]}>Continue</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -179,14 +195,14 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fontFamily.bold,
     fontSize: 24,
-    color: colors.text,
+    // color: colors.text, // Dinamik
     marginBottom: spacing.small,
   },
 
   subtitle: {
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: colors.textLight,
+    // color: colors.textLight, // Dinamik
     lineHeight: 22.4,
     marginBottom: spacing.xlarge,
   },
@@ -197,39 +213,39 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: colors.text,
+    // color: colors.text, // Dinamik
     marginBottom: spacing.small,
   },
   required: {
     fontFamily: fontFamily.semiBold,
     fontSize: 14,
-    color: colors.error,
+    // color: colors.error, // Dinamik
   },
 
   input: {
     borderRadius: 8,
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: colors.text,
+    // color: colors.text, // Dinamik
     borderRadius: 8,
-    backgroundColor: "#F2F2F2",
+    // backgroundColor: "#F2F2F2", // Dinamik
     height: 55,
-    padding: 20,
+    padding: 15,
   },
   inputError: {
-    borderColor: colors.error,
+    // borderColor: colors.error, // Dinamik inline
   },
 
   helperText: {
     fontFamily: fontFamily.regular,
     fontSize: 12,
-    color: colors.textLight,
+    // color: colors.textLight, // Dinamik
     marginTop: 4,
   },
   errorText: {
     fontFamily: fontFamily.regular,
     fontSize: 12,
-    color: colors.error,
+    // color: colors.error, // Dinamik
     marginTop: 4,
   },
 
@@ -237,19 +253,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.horizontal,
     paddingVertical: spacing.large,
     borderTopWidth: 1,
-    borderTopColor: "#F0F0F0",
+    // borderTopColor: "#F0F0F0", // Dinamik
   },
   continueButton: {
     height: 55,
     borderRadius: 25,
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary, // Dinamik
     justifyContent: "center",
     alignItems: "center",
   },
   continueButtonText: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: colors.white,
+    // color: colors.white, // Dinamik
   },
 });
 

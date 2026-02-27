@@ -2,9 +2,11 @@ import React, { useEffect, useRef } from "react";
 import { View, Text, Animated, StyleSheet, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LogoIcon from "../../assets/images/loginLogo.png";
-import { colors } from "../styles/colors";
+import { useTheme } from "../context/ThemeContext"; 
 
 const SplashScreen = ({ navigation }) => {
+  const { theme } = useTheme(); // Theme məlumatlarını alırıq
+
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = useRef(new Animated.Value(0.85)).current;
   const textOpacity = useRef(new Animated.Value(0)).current;
@@ -37,7 +39,12 @@ const SplashScreen = ({ navigation }) => {
   }, [navigation, opacity, scale, textOpacity]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView 
+      style={[
+        styles.container, 
+        { backgroundColor: theme.background } // DİNAMİK: Arxa fon
+      ]}
+    >
       <Animated.Image
         source={LogoIcon}
         style={[
@@ -49,10 +56,26 @@ const SplashScreen = ({ navigation }) => {
         ]}
         resizeMode="contain"
       />
-      <Animated.Text style={[styles.title, { opacity: textOpacity }]}>
+      <Animated.Text 
+        style={[
+          styles.title, 
+          { 
+            opacity: textOpacity,
+            color: theme.primary // DİNAMİK: Başlıq rəngi
+          }
+        ]}
+      >
         Discover. Drive. Earn.
       </Animated.Text>
-      <Animated.Text style={[styles.subtitle, { opacity: textOpacity }]}>
+      <Animated.Text 
+        style={[
+          styles.subtitle, 
+          { 
+            opacity: textOpacity,
+            color: theme.textSecondary // DİNAMİK: Alt başlıq rəngi
+          }
+        ]}
+      >
         Make your journey matter with Tripsify!
       </Animated.Text>
     </SafeAreaView>
@@ -62,7 +85,7 @@ const SplashScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white, // Silindi, inline style-a keçdi
     justifyContent: "center",
     alignItems: "center",
   },
@@ -74,14 +97,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: "700",
-    color: colors.primary,
+    // color: colors.primary, // Silindi
     marginBottom: 10,
     letterSpacing: 0.8,
     textAlign: "center",
   },
   subtitle: {
     fontSize: 16,
-    color: colors.textLight,
+    // color: colors.textLight, // Silindi
     textAlign: "center",
     fontWeight: "500",
     letterSpacing: 0.4,

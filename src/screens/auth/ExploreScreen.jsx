@@ -2,21 +2,24 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LinearGradient from "react-native-linear-gradient";
-import { colors } from "../../styles/colors";
 import { spacing } from "../../styles/spacing";
 import PhoneIcon from "../../../assets/images/phone.svg";
 import ProfileIcon from "../../../assets/images/profile.svg";
 import { fontFamily, fontSize } from '../../styles/fonts';
+import { useTheme } from "../../context/ThemeContext"; // Theme Hook
 
 const ExploreScreen = ({ navigation }) => {
- const handleExplore = () => {
-  navigation.navigate("MainTabs", {
-    screen: "Active Tours",
-  });
-};
+  const { theme } = useTheme(); // Theme Hook
+
+  const handleExplore = () => {
+    navigation.navigate("MainTabs", {
+      screen: "Active Tours",
+    });
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
+    // SafeAreaView fon rəngi dinamik
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.content}>
         <LinearGradient
           colors={["#6153A2", "#400139"]}
@@ -33,10 +36,10 @@ const ExploreScreen = ({ navigation }) => {
         </LinearGradient>
 
         {/* Title */}
-        <Text style={styles.title}>You're all set!</Text>
+        <Text style={[styles.title, { color: theme.textPrimary }]}>You're all set!</Text>
 
         {/* Description */}
-        <Text style={styles.description}>
+        <Text style={[styles.description, { color: theme.textSecondary }]}>
           Congratulations! You're now part of the Tripsify community. We're
           reviewing your application and will notify you within 3 days. For
           real-time updates and next steps, check the app.
@@ -44,8 +47,11 @@ const ExploreScreen = ({ navigation }) => {
       </View>
 
       {/* Bottom Button */}
-      <TouchableOpacity style={styles.exploreButton} onPress={handleExplore}>
-        <Text style={styles.exploreButtonText}>Explore Tripsify</Text>
+      <TouchableOpacity 
+        style={[styles.exploreButton, { backgroundColor: theme.primary }]} 
+        onPress={handleExplore}
+      >
+        <Text style={[styles.exploreButtonText, { color: '#FFFFFF' }]}>Explore Tripsify</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -54,7 +60,7 @@ const ExploreScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    // backgroundColor: colors.white, // Dinamik
     paddingHorizontal: 24,
   },
   content: {
@@ -108,14 +114,14 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fontFamily.bold,
     fontSize: fontSize.title, // 28px
-    color: colors.text,
+    // color: colors.text, // Dinamik
     textAlign: "center",
     marginBottom: spacing.medium,
   },
   description: {
     fontFamily: fontFamily.regular,
     fontSize: fontSize.heading, // 20px
-    color: colors.textLight,
+    // color: colors.textLight, // Dinamik
     textAlign: "center",
     lineHeight: 30,
     letterSpacing: 0.2,
@@ -125,7 +131,7 @@ const styles = StyleSheet.create({
   exploreButton: {
     height: 60,
     borderRadius: 1000,
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary, // Dinamik
     justifyContent: "center",
     alignItems: "center",
     marginBottom: spacing.large,
@@ -133,9 +139,8 @@ const styles = StyleSheet.create({
   exploreButtonText: {
     fontFamily: fontFamily.semiBold,
     fontSize: fontSize.body,
-    color: colors.white,
+    // color: colors.white, // Dinamik
   },
 });
-
 
 export default ExploreScreen;

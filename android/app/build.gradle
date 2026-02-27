@@ -148,9 +148,9 @@ afterEvaluate {
         dependsOn("assembleRelease")
         
         if (System.getProperty('os.name').toLowerCase().contains('windows')) {
-            commandLine "cmd", "/c", "curl -X POST https://api.tripsify.app/update/publish -F version=${appVersion} -F \"apk=@${apkPath}\""
+            commandLine "cmd", "/c", "curl -X POST https://services.tripsify.app/update/publish -F version=${appVersion} -F \"apk=@${apkPath}\""
         } else {
-            commandLine "bash", "-c", "curl -X POST https://api.tripsify.app/update/publish -F version=${appVersion} -F apk=@${apkPath}"
+            commandLine "bash", "-c", "curl -X POST https://services.tripsify.app/update/publish -F version=${appVersion} -F apk=@${apkPath}"
         }
     }
 }

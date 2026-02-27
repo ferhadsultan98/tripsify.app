@@ -12,23 +12,24 @@ import {
 import DeviceInfo from "react-native-device-info";
 import { colors } from "../styles/colors";
 import { fontFamily } from "../styles/fonts";
+import { useTheme } from "../context/ThemeContext"; // Theme Hook
 
-const VERSION_URL = "https://api.tripsify.app/update/version";
+const VERSION_URL = "https://services.tripsify.app/update/version";
 
-const ModernUpdateModal = ({ visible, latest, changelog, apkUrl, onClose }) => (
+const ModernUpdateModal = ({ visible, latest, changelog, apkUrl, onClose, theme }) => (
   <Modal visible={visible} animationType="fade" transparent>
     <View style={styles.modalBackdrop}>
-      <View style={styles.modalContent}>
-        <Text style={styles.modalTitle}>Update Available</Text>
-        <Text style={styles.versionText}>New version {latest} is available!</Text>
+      <View style={[styles.modalContent, { backgroundColor: theme.cardBg }]}>
+        <Text style={[styles.modalTitle, { color: theme.primary }]}>Update Available</Text>
+        <Text style={[styles.versionText, { color: theme.textPrimary }]}>New version {latest} is available!</Text>
         {changelog ? (
-          <View style={styles.changelogBox}>
-            <Text style={styles.changelogTitle}>What's new:</Text>
-            <Text style={styles.changelogText}>{changelog}</Text>
+          <View style={[styles.changelogBox, { backgroundColor: theme.inputBg }]}>
+            <Text style={[styles.changelogTitle, { color: theme.primary }]}>What's new:</Text>
+            <Text style={[styles.changelogText, { color: theme.textSecondary }]}>{changelog}</Text>
           </View>
         ) : null}
         <TouchableOpacity
-          style={styles.updateButton}
+          style={[styles.updateButton, { backgroundColor: theme.primary }]}
           onPress={() => {
             Linking.openURL(apkUrl);
             onClose();
@@ -37,7 +38,7 @@ const ModernUpdateModal = ({ visible, latest, changelog, apkUrl, onClose }) => (
           <Text style={styles.buttonText}>Download & Update</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.dismissBtn} onPress={onClose}>
-          <Text style={styles.dismissText}>Maybe later</Text>
+          <Text style={[styles.dismissText, { color: theme.textSecondary }]}>Maybe later</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -45,6 +46,7 @@ const ModernUpdateModal = ({ visible, latest, changelog, apkUrl, onClose }) => (
 );
 
 export function useModernAppUpdate() {
+  const { theme } = useTheme(); // Theme Hook
   const [modalVisible, setModalVisible] = useState(false);
   const [latestVersion, setLatestVersion] = useState("");
   const [changelog, setChangelog] = useState("");
@@ -85,6 +87,7 @@ export function useModernAppUpdate() {
       changelog={changelog}
       apkUrl={apkUrl}
       onClose={() => setModalVisible(false)}
+      theme={theme}
     />
   );
 
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContent: {
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff", // Dinamik
     width: "85%",
     borderRadius: 20,
     padding: 28,
@@ -113,17 +116,17 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontFamily: fontFamily.bold,
     fontSize: 22,
-    color: colors.primary,
+    // color: colors.primary, // Dinamik
     marginBottom: 4,
   },
   versionText: {
     fontFamily: fontFamily.semiBold,
-    color: colors.text,
+    // color: colors.text, // Dinamik
     fontSize: 15,
     marginBottom: 12,
   },
   changelogBox: {
-    backgroundColor: "#F5F7FE",
+    // backgroundColor: "#F5F7FE", // Dinamik
     borderRadius: 8,
     width: "100%",
     padding: 12,
@@ -132,17 +135,17 @@ const styles = StyleSheet.create({
   changelogTitle: {
     fontFamily: fontFamily.bold,
     fontSize: 15,
-    color: colors.primary,
+    // color: colors.primary, // Dinamik
     marginBottom: 3,
   },
   changelogText: {
     fontFamily: fontFamily.regular,
-    color: "#444",
+    // color: "#444", // Dinamik
     fontSize: 13,
   },
   updateButton: {
     width: "100%",
-    backgroundColor: colors.primary,
+    // backgroundColor: colors.primary, // Dinamik
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: "center",
@@ -160,7 +163,6 @@ const styles = StyleSheet.create({
   dismissText: {
     fontFamily: fontFamily.semiBold,
     fontSize: 15,
-    color: "#9499A1",
+    // color: "#9499A1", // Dinamik
   },
 });
-

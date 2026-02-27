@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+// src/screens/AppAppearanceScreen.jsx
+
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -12,140 +14,131 @@ import {
   I18nManager,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useTranslation } from "react-i18next"; // i18next import
-import RNRestart from "react-native-restart"; // Restart paketi
+import { useTranslation } from "react-i18next";
 import ScreenHeader from "../../components/common/ScreenHeader";
 import ChevronRightIcon from "../../../assets/images/rightIcon.svg";
-import { colors } from "../../styles/colors";
 import { fontFamily } from "../../styles/fonts";
+
+// YENİ: Theme Hook-u import edirik
+import { useTheme } from "../../context/ThemeContext";
 
 const { height } = Dimensions.get("window");
 
 const AppAppearanceScreen = ({ navigation }) => {
-  const { t, i18n } = useTranslation(); // Tərcümə hook-u
+  const { t, i18n } = useTranslation();
 
-  // Dil kodlarını oxunaqlı adlara çevirmək üçün
-  const getLanguageLabel = (code) => {
-    switch (code) {
-      case "en": return "English (US)";
-      case "az": return "Azərbaycanca";
-      case "tr": return "Türkçe";
-      case "ru": return "Русский";
-      case "ar": return "العربية";
-      default: return "English (US)";
-    }
-  };
+  // Context-dən theme və funksiyanı götürürük
+  const { theme, themeMode, updateTheme } = useTheme();
 
-  const [theme, setTheme] = useState("Light");
-  const [language, setLanguage] = useState(i18n.language); // Cari dili default olaraq seç
   const [showThemeModal, setShowThemeModal] = useState(false);
-  const [showLanguageModal, setShowLanguageModal] = useState(false);
 
   const themeOptions = [
-    { value: "System Default", label: "System Default" },
-    { value: "Light", label: "Light" },
-    { value: "Dark", label: "Dark" },
+    { value: "system", label: "System Default" },
+    { value: "light", label: "Light" },
+    { value: "dark", label: "Dark" },
   ];
 
-  // Bizim i18n kodlarına uyğun dil seçimləri
-  const languageOptions = [
-    { value: "en", label: "English (US)" },
-    { value: "az", label: "Azərbaycanca" },
-    { value: "tr", label: "Türkçe" },
-    { value: "ru", label: "Русский" },
-    { value: "ar", label: "العربية" },
-    { value: "ua", label: "Українська" },
-  ];
-
-  // Dili dəyişən əsas funksiya
-  const handleLanguageChange = async (langCode) => {
-    setLanguage(langCode);
-    
-    // 1. Dili dəyişirik
-    await i18n.changeLanguage(langCode);
-
-    // 2. RTL yoxlanışı
-    const isRTL = langCode === "ar";
-    
-    // Əgər RTL vəziyyəti dəyişirsə, tətbiqi restart edirik
-    if (isRTL !== I18nManager.isRTL) {
-        I18nManager.allowRTL(isRTL);
-        I18nManager.forceRTL(isRTL);
-        setTimeout(() => {
-            RNRestart.Restart();
-        }, 500);
-    }
+  const getCurrentThemeLabel = () => {
+    const option = themeOptions.find((opt) => opt.value === themeMode);
+    return option ? option.label : "System Default";
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <ScreenHeader
-          title={t("appearance_screen.title") || "App Appearance"} // Tərcümə əlavə etdim
-          onBackPress={() => navigation.goBack()}
-          showProgress={false}
-        />
+    // Background rəngi dinamik oldu: theme.background
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: theme.background }]}
+    >
+      <ScreenHeader
+        title={t("appearance_screen.title") || "App Appearance"}
+        onBackPress={() => navigation.goBack()}
+        showProgress={false}
+      />
 
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+      >
+        {/* THEME SEÇİMİ */}
+        <TouchableOpacity
+          style={styles.optionRow}
+          onPress={() => setShowThemeModal(true)}
         >
-          {/* Theme */}
-          <TouchableOpacity
-            style={styles.optionRow}
-            onPress={() => setShowThemeModal(true)}
-          >
-            <Text style={styles.optionLabel}>{t("appearance_screen.theme") || "Theme"}</Text>
-            <View style={styles.optionRight}>
-              <Text style={styles.optionValue}>{theme}</Text>
-              <ChevronRightIcon width={20} height={20} fill="#000" style={{ transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }] }} /> 
-            </View>
-          </TouchableOpacity>
+          {/* Mətn rəngi dinamik: theme.textPrimary */}
+          <Text style={[styles.optionLabel, { color: theme.textPrimary }]}>
+            {t("appearance_screen.theme") || "Theme"}
+          </Text>
+          <View style={styles.optionRight}>
+            {/* Alt mətn rəngi dinamik: theme.textSecondary */}
+            <Text style={[styles.optionValue, { color: theme.textSecondary }]}>
+              {getCurrentThemeLabel()}
+            </Text>
+            {/* İkon rəngi dinamik: theme.iconColor */}
+            <ChevronRightIcon
+              width={20}
+              height={20}
+              fill={theme.iconColor}
+              style={{ transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }] }}
+            />
+          </View>
+        </TouchableOpacity>
 
-          {/* App Language */}
-          <TouchableOpacity
-            style={styles.optionRow}
-            onPress={() => setShowLanguageModal(true)}
-          >
-            <Text style={styles.optionLabel}>{t("appearance_screen.language") || "App Language"}</Text>
-            <View style={styles.optionRight}>
-              <Text style={styles.optionValue}>{getLanguageLabel(language)}</Text>
-              <ChevronRightIcon width={20} height={20} fill="#000" style={{ transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }] }} />
-            </View>
-          </TouchableOpacity>
-        </ScrollView>
+        {/* DIL SEÇİMİ */}
+        <TouchableOpacity
+          style={styles.optionRow}
+          onPress={() => navigation.navigate("LanguageSelectionScreen")}
+        >
+          <Text style={[styles.optionLabel, { color: theme.textPrimary }]}>
+            {t("appearance_screen.language") || "App Language"}
+          </Text>
+          <View style={styles.optionRight}>
+            <Text style={[styles.optionValue, { color: theme.textSecondary }]}>
+              {i18n.language === "en"
+                ? "English"
+                : i18n.language === "az"
+                ? "Azərbaycanca"
+                : i18n.language === "ru"
+                ? "Русский"
+                : i18n.language}
+            </Text>
+            <ChevronRightIcon
+              width={20}
+              height={20}
+              fill={theme.iconColor}
+              style={{ transform: [{ scaleX: I18nManager.isRTL ? -1 : 1 }] }}
+            />
+          </View>
+        </TouchableOpacity>
+      </ScrollView>
 
-        {/* Theme BottomSheet */}
-        <BottomSheet
-          visible={showThemeModal}
-          onClose={() => setShowThemeModal(false)}
-          title={t("appearance_screen.choose_theme") || "Choose Theme"}
-          options={themeOptions}
-          selectedValue={theme}
-          onSelect={setTheme}
-        />
-
-        {/* Language BottomSheet */}
-        <BottomSheet
-          visible={showLanguageModal}
-          onClose={() => setShowLanguageModal(false)}
-          title={t("appearance_screen.choose_language") || "Choose Language"}
-          options={languageOptions}
-          selectedValue={language}
-          onSelect={handleLanguageChange} // Dəyişdirilmiş funksiya
-        />
-      </View>
+      {/* MODAL */}
+      <BottomSheet
+        visible={showThemeModal}
+        onClose={() => setShowThemeModal(false)}
+        title={t("appearance_screen.choose_theme") || "Choose Theme"}
+        options={themeOptions}
+        selectedValue={themeMode}
+        onSelect={updateTheme} // Context-dəki funksiyanı çağırırıq
+        theme={theme} // Theme obyektini prop kimi ötürürük
+      />
     </SafeAreaView>
   );
 };
 
-// BottomSheet Component (Olduğu kimi qalır, sadəcə funksionallıq inteqrasiya olunub)
-const BottomSheet = ({ visible, onClose, title, options, selectedValue, onSelect }) => {
-  const slideAnim = useRef(new Animated.Value(height)).current;
-  const opacityAnim = useRef(new Animated.Value(0)).current;
+// BottomSheet komponentini də dinamikləşdiririk
+const BottomSheet = ({
+  visible,
+  onClose,
+  title,
+  options,
+  selectedValue,
+  onSelect,
+  theme,
+}) => {
+  // ... Animasiya kodları eynidir ...
+  const slideAnim = React.useRef(new Animated.Value(height)).current;
+  const opacityAnim = React.useRef(new Animated.Value(0)).current;
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (visible) {
       Animated.parallel([
         Animated.timing(slideAnim, {
@@ -175,62 +168,67 @@ const BottomSheet = ({ visible, onClose, title, options, selectedValue, onSelect
     }
   }, [visible]);
 
-  const handleSelect = (value) => {
-    onSelect(value);
-    // onClose(); // Buranı bağladım ki, OK düyməsi ilə təsdiqlənsin (istəyə bağlı aça bilərsən)
-  };
-
-  // Yeni state saxlayırıq ki, istifadəçi seçib sonra OK desin
-  const [tempSelected, setTempSelected] = useState(selectedValue);
-
-  useEffect(() => {
-      setTempSelected(selectedValue);
-  }, [visible, selectedValue]);
-
-
-  const handleOkPress = () => {
-      onSelect(tempSelected);
-      onClose();
-  }
-
   return (
-    <Modal transparent visible={visible} animationType="none" onRequestClose={onClose}>
+    <Modal
+      transparent
+      visible={visible}
+      animationType="none"
+      onRequestClose={onClose}
+    >
       <TouchableWithoutFeedback onPress={onClose}>
         <Animated.View style={[sheetStyles.overlay, { opacity: opacityAnim }]}>
           <TouchableWithoutFeedback>
             <Animated.View
               style={[
                 sheetStyles.sheetContainer,
-                { transform: [{ translateY: slideAnim }] },
+                {
+                  transform: [{ translateY: slideAnim }],
+                  backgroundColor: theme.cardBg, // Dinamik fon
+                },
               ]}
             >
-              <View style={sheetStyles.handle} />
-              <Text style={sheetStyles.title}>{title}</Text>
+              <View
+                style={[sheetStyles.handle, { backgroundColor: theme.border }]}
+              />
+              <Text style={[sheetStyles.title, { color: theme.textPrimary }]}>
+                {title}
+              </Text>
 
               <View style={sheetStyles.optionsContainer}>
                 {options.map((option) => (
                   <TouchableOpacity
                     key={option.value}
                     style={sheetStyles.optionRow}
-                    onPress={() => setTempSelected(option.value)}
+                    onPress={() => {
+                      onSelect(option.value);
+                      onClose();
+                    }}
                   >
-                    <View style={sheetStyles.radioOuter}>
-                      {tempSelected === option.value && (
-                        <View style={sheetStyles.radioInner} />
+                    <View
+                      style={[
+                        sheetStyles.radioOuter,
+                        { borderColor: theme.primary },
+                      ]}
+                    >
+                      {selectedValue === option.value && (
+                        <View
+                          style={[
+                            sheetStyles.radioInner,
+                            { backgroundColor: theme.primary },
+                          ]}
+                        />
                       )}
                     </View>
-                    <Text style={sheetStyles.optionText}>{option.label}</Text>
+                    <Text
+                      style={[
+                        sheetStyles.optionText,
+                        { color: theme.textPrimary },
+                      ]}
+                    >
+                      {option.label}
+                    </Text>
                   </TouchableOpacity>
                 ))}
-              </View>
-
-              <View style={sheetStyles.buttonContainer}>
-                <TouchableOpacity style={sheetStyles.cancelButton} onPress={onClose}>
-                  <Text style={sheetStyles.cancelText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={sheetStyles.okButton} onPress={handleOkPress}>
-                  <Text style={sheetStyles.okText}>OK</Text>
-                </TouchableOpacity>
               </View>
             </Animated.View>
           </TouchableWithoutFeedback>
@@ -241,23 +239,9 @@ const BottomSheet = ({ visible, onClose, title, options, selectedValue, onSelect
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  container: {
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingHorizontal: 24,
-    paddingTop: 24,
-    paddingBottom: 100,
-    gap: 28,
-  },
-
+  safeArea: { flex: 1 },
+  scrollView: { flex: 1 },
+  scrollContent: { paddingHorizontal: 24, paddingTop: 24, gap: 28 },
   optionRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -267,21 +251,10 @@ const styles = StyleSheet.create({
   optionLabel: {
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    fontWeight: "400",
-    color: "#000",
-    textAlign: "left", // RTL dəstəyi üçün
+    textAlign: "left",
   },
-  optionRight: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-  },
-  optionValue: {
-    fontFamily: fontFamily.regular,
-    fontSize: 15,
-    fontWeight: "400",
-    color: "#757575",
-  },
+  optionRight: { flexDirection: "row", alignItems: "center", gap: 16 },
+  optionValue: { fontFamily: fontFamily.regular, fontSize: 15 },
 });
 
 const sheetStyles = StyleSheet.create({
@@ -291,7 +264,6 @@ const sheetStyles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   sheetContainer: {
-    backgroundColor: "#FFF",
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingHorizontal: 24,
@@ -302,86 +274,28 @@ const sheetStyles = StyleSheet.create({
   handle: {
     width: 40,
     height: 4,
-    backgroundColor: "#E0E0E0",
     borderRadius: 2,
     alignSelf: "center",
     marginBottom: 20,
   },
-
   title: {
     fontFamily: fontFamily.semiBold,
     fontSize: 18,
-    fontWeight: "600",
-    color: "#000",
     textAlign: "center",
     marginBottom: 24,
   },
-
-  optionsContainer: {
-    gap: 20,
-    marginBottom: 32,
-  },
-  optionRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-  },
-  optionText: {
-    fontFamily: fontFamily.regular,
-    fontSize: 16,
-    fontWeight: "400",
-    color: "#000",
-    textAlign: "left",
-  },
-
+  optionsContainer: { gap: 20 },
+  optionRow: { flexDirection: "row", alignItems: "center", gap: 12 },
+  optionText: { fontFamily: fontFamily.regular, fontSize: 16 },
   radioOuter: {
     width: 20,
     height: 20,
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
   },
-  radioInner: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: colors.primary,
-  },
-
-  buttonContainer: {
-    flexDirection: "row",
-    gap: 12,
-  },
-  cancelButton: {
-    flex: 1,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: "#F5F5F5",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  cancelText: {
-    fontFamily: fontFamily.semiBold,
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#757575",
-  },
-  okButton: {
-    flex: 1,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.primary,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  okText: {
-    fontFamily: fontFamily.semiBold,
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#FFF",
-  },
+  radioInner: { width: 10, height: 10, borderRadius: 5 },
 });
 
 export default AppAppearanceScreen;

@@ -7,51 +7,62 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import { useTranslation } from 'react-i18next'; // Hook-u import edirik
-import { colors } from "../../styles/colors";
+import { useTranslation } from 'react-i18next';
 import { spacing } from "../../styles/spacing";
-import { fontFamily, fontSize } from "../../styles/fonts";
+import { fontFamily } from "../../styles/fonts";
 import LogoIcon from "../../../assets/images/loginLogo.png";
+import { useTheme } from "../../context/ThemeContext";
+import AppButton from "../../components/common/AppButton"; // Yeni import
 
 const LoginScreen = ({ navigation }) => {
-  const { t } = useTranslation(); // Tərcümə funksiyasını çağırırıq
+  const { t } = useTranslation();
+  const { theme } = useTheme();
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView 
+      style={[styles.container, { backgroundColor: theme.background }]} 
+      showsVerticalScrollIndicator={false}
+    >
       {/* Logo */}
       <View style={styles.logoContainer}>
         <Image source={LogoIcon} style={styles.logo} resizeMode="contain" />
       </View>
 
       {/* Header */}
-      <Text style={styles.title}>{t('login_screen.title')}</Text>
-      <Text style={styles.subtitle}>
+      <Text style={[styles.title, { color: theme.textPrimary }]}>
+        {t('login_screen.title')}
+      </Text>
+      <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
         {t('login_screen.subtitle')}
       </Text>
 
-      {/* Login */}
-      <TouchableOpacity
-        style={styles.loginButton}
+      {/* Login Button (Primary) */}
+      <AppButton
+        title={t('login_screen.login_btn')}
         onPress={() => navigation.navigate("LoginFormScreen")}
-      >
-        <Text style={styles.loginButtonText}>{t('login_screen.login_btn')}</Text>
-      </TouchableOpacity>
+        style={{ marginTop: spacing.xlarge, marginBottom: spacing.medium }}
+      />
 
-      {/* SignUp */}
-      <TouchableOpacity
-        style={styles.signUpButton}
+      {/* SignUp Button (Outline) */}
+      <AppButton
+        title={t('login_screen.signup_btn')}
+        variant="outline"
         onPress={() => navigation.navigate("SignUpFormScreen")}
-      >
-        <Text style={styles.signUpText}>{t('login_screen.signup_btn')}</Text>
-      </TouchableOpacity>
+        style={{ marginBottom: spacing.large }}
+      />
 
+      {/* Footer Links */}
       <View style={styles.footer}>
         <TouchableOpacity onPress={() => navigation.navigate("PrivacyPolicy")}>
-          <Text style={styles.footerLink}>{t('login_screen.privacy_policy')}</Text>
+          <Text style={[styles.footerLink, { color: theme.textSecondary }]}>
+            {t('login_screen.privacy_policy')}
+          </Text>
         </TouchableOpacity>
-        <Text style={styles.footerDot}>·</Text>
+        <Text style={[styles.footerDot, { color: theme.textSecondary }]}>·</Text>
         <TouchableOpacity onPress={() => navigation.navigate("TermsOfService")}>
-          <Text style={styles.footerLink}>{t('login_screen.terms_of_service')}</Text>
+          <Text style={[styles.footerLink, { color: theme.textSecondary }]}>
+            {t('login_screen.terms_of_service')}
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -61,7 +72,6 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
     paddingHorizontal: spacing.xlarge,
   },
   logoContainer: {
@@ -77,47 +87,17 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fontFamily.bold,
     fontSize: 24,
-    color: colors.text,
     textAlign: "center",
     marginBottom: spacing.xlarge,
   },
   subtitle: {
     fontFamily: fontFamily.regular,
     fontSize: 18,
-    color: colors.textLight,
     textAlign: "center",
     lineHeight: 22,
     marginBottom: spacing.xlarge * 5,
   },
-  loginButton: {
-    height: 55,
-    borderRadius: 25,
-    backgroundColor: colors.primary,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: spacing.medium,
-    marginTop: spacing.xlarge,
-  },
-  loginButtonText: {
-    fontFamily: fontFamily.semiBold,
-    fontSize: fontSize.body,
-    color: colors.white,
-  },
-  signUpButton: {
-    height: 55,
-    borderRadius: 25,
-    backgroundColor: colors.white,
-    borderWidth: 1,
-    borderColor: colors.border,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: spacing.large,
-  },
-  signUpText: {
-    fontFamily: fontFamily.semiBold,
-    fontSize: fontSize.body,
-    color: colors.text,
-  },
+  // Button stilləri silindi, çünki AppButton daxilindədir
   footer: {
     flexDirection: "row",
     justifyContent: "center",
@@ -129,11 +109,9 @@ const styles = StyleSheet.create({
   footerLink: {
     fontFamily: fontFamily.regular,
     fontSize: 12,
-    color: colors.textLight,
   },
   footerDot: {
     fontFamily: fontFamily.regular,
-    color: colors.textLight,
   },
 });
 

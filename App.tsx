@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SplashScreen from "./src/screens/SplashScreen";
@@ -24,35 +24,51 @@ import ContactSupportScreen from "./src/screens/main/ContactSupportScreen";
 import TourDetailScreen from "./src/screens/main/TourDetailScreen";
 import PaymentMethodsScreen from "./src/screens/main/PaymentMethodsScreen";
 import DeviceManagementScreen from "./src/screens/main/DeviceManagementScreen";
-import './src/i18n/index.js'
+import AboutUsScreen from "./src/screens/main/AboutUsScreen.jsx";
+import LanguageSelectionScreen from "./src/screens/main/LanguageSelectionScreen.jsx";
+import './src/i18n/index.js';
+
 
 import { initNotifications } from "./src/services/notifications";
 import { useModernAppUpdate } from "./src/services/updateChecker";
 
+
+// Theme Provider-i import edirik
+import { ThemeProvider, useTheme } from "./src/context/ThemeContext.js";
+// Auth Provider-i import edirik (YENİ)
+import { AuthProvider } from "./src/context/AuthContext.jsx";
+import { SettingsProvider } from './src/context/SettingsContext';
+
+
 const Stack = createNativeStackNavigator();
 
-export default function App() {
-  const [updateUIModals] = useModernAppUpdate();
 
-  React.useEffect(() => {
-    initNotifications();
-  }, []);
+// Naviqasiya komponentini ayrıca funksiyaya çıxarırıq ki, useTheme hook-unu istifadə edə bilək
+const MainNavigator = () => {
+  const { theme, themeMode } = useTheme();
+  const systemScheme = useColorScheme();
+  
+  // Status Bar stili: Əgər dark mode-dursa 'light-content', yoxsa 'dark-content'
+  const isDark = themeMode === 'dark' || (themeMode === 'system' && systemScheme === 'dark');
+  const barStyle = isDark ? 'light-content' : 'dark-content';
+
 
   return (
     <>
       <StatusBar
-        barStyle="dark-content"
-        backgroundColor="#FFFFFF"
+        barStyle={barStyle}
+        backgroundColor={theme.background}
         translucent={false}
       />
-     
+      
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="SplashScreen"
           screenOptions={{
             headerShown: false,
             animation: "slide_from_right",
-            contentStyle: { backgroundColor: "#FFFFFF" },
+            // Ekranların arxa fon rəngini dinamik edirik
+            contentStyle: { backgroundColor: theme.background },
           }}
         >
           <Stack.Screen name="SplashScreen" component={SplashScreen} />
@@ -118,9 +134,49 @@ export default function App() {
             name="DeviceManagementScreen"
             component={DeviceManagementScreen}
           />
+          <Stack.Screen
+            name="AboutUsScreen"
+            component={AboutUsScreen}
+          />
+          <Stack.Screen
+            name="LanguageSelectionScreen"
+            component={LanguageSelectionScreen}
+          />
         </Stack.Navigator>
       </NavigationContainer>
-       {updateUIModals}
     </>
+  );
+};
+
+
+// Yeni AppContent komponenti: useModernAppUpdate burada çağrılır
+const AppContent = () => {
+  const [updateUIModals] = useModernAppUpdate();
+
+
+  return (
+    <>
+      <MainNavigator />
+      {updateUIModals}
+    </>
+  );
+};
+
+
+export default function App() {
+  React.useEffect(() => {
+    initNotifications();
+  }, []);
+
+
+  return (
+    // ThemeProvider ən üstdə olmalıdır, sonra AuthProvider
+    <ThemeProvider>
+      <SettingsProvider>
+        <AuthProvider>
+            <AppContent />
+        </AuthProvider>
+        </SettingsProvider>
+    </ThemeProvider>
   );
 }

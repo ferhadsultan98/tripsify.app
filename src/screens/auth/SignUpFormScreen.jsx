@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,75 +8,206 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ScreenHeader from "../../components/common/ScreenHeader";
 import Select from "../../components/common/Select";
 import PhoneInput from "../../components/common/PhoneInput";
-import { countries, cities } from "../../data/countries";
-import { colors } from "../../styles/colors";
 import { spacing } from "../../styles/spacing";
 import { fontFamily } from "../../styles/fonts";
 import EmailIcon from "../../../assets/images/email.svg";
+import { useTheme } from "../../context/ThemeContext";
+
+// API & Hooks
+import { authService } from "../../api/auth";
+import { commonService } from "../../api/common";
+import useApi from "../../hooks/useApi";
 
 const SignUpFormScreen = ({ navigation }) => {
+  const { theme } = useTheme();
+
+  // --- State ---
   const [email, setEmail] = useState("");
-  const [country, setCountry] = useState("AZ");
-  const [city, setCity] = useState("");
+  const [country, setCountry] = useState(""); // Ölkə ID-si burada saxlanılır
+  const [city, setCity] = useState(""); // Şəhər ID-si və ya adı
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [phoneCountryCode, setPhoneCountryCode] = useState("AZ");
+  const [phoneCountryCode, setPhoneCountryCode] = useState("994");
   const [agreed, setAgreed] = useState(false);
+
+  // Data State
+  const [countryOptions, setCountryOptions] = useState([]);
+  const [cityOptions, setCityOptions] = useState([]);
+
+  // UI State
   const [errors, setErrors] = useState({});
 
-  const countryOptions = countries.map((c) => ({
-    value: c.code,
-    label: c.name,
-    icon: c.flag,
-  }));
+  const registerApi = useApi(authService.register);
+  const countriesApi = useApi(commonService.getCountries);
+  const citiesApi = useApi(commonService.getCities);
 
-  const cityOptions = (cities[country] || []).map((c) => ({
-    value: c,
-    label: c,
-  }));
+  useEffect(() => {
+    const loadCountries = async () => {
+      console.log("🔄 [1] Ölkələr sorğusu göndərilir...");
 
-  const selectedCountry = countries.find((c) => c.code === country);
+      const { data, error } = await countriesApi.request();
 
+      if (error) {
+        console.error("❌ [1] Ölkə API Xətası:", error);
+        return;
+      }
+
+      if (data) {
+        const listData = Array.isArray(data)
+          ? data
+          : data.results || data.data || [];
+
+        console.log(`📊 Tapılan ölkə sayı: ${listData.length}`);
+
+        if (listData.length > 0) {
+          const formatted = listData.map((item) => {
+            const nameLabel =
+              typeof item.name === "object" && item.name !== null
+                ? item.name.en || Object.values(item.name)[0]
+                : item.name;
+
+            return {
+              label: nameLabel || "Unknown",
+              value: item.id,
+              icon: item.flag,
+              phone_code: item.phone_code,
+            };
+          });
+          setCountryOptions(formatted);
+        } else {
+          console.warn("⚠️ Ölkə siyahısı boşdur! Backend formatını yoxlayın.");
+        }
+      }
+    };
+    loadCountries();
+  }, []);
+
+  // 2. Ölkə seçiləndə
+  const handleCountryChange = async (selectedId) => {
+    console.log("point -> Selected Country ID:", selectedId);
+
+    setCountry(selectedId);
+    setCity("");
+    setCityOptions([]);
+
+    // Telefon kodunu tapmaq
+    const selectedObj = countryOptions.find((c) => c.value === selectedId);
+    if (selectedObj) {
+      console.log("Seçilən ölkə obyekti:", selectedObj);
+      if (selectedObj.phone_code) {
+        setPhoneCountryCode(selectedObj.phone_code.replace("+", ""));
+      }
+    }
+
+    // Şəhərlər üçün sorğu (ID göndərilir)
+    console.log(`🔄 [2] Şəhər sorğusu göndərilir (Ölkə ID: ${selectedId})...`);
+
+    // /city/?country=ID
+    const { data, error } = await citiesApi.request(selectedId);
+
+    if (error) {
+      console.error("❌ [2] Şəhər API Xətası:", error);
+      return;
+    }
+
+    if (data) {
+      console.log("✅ [2] Şəhər API Cavabı:", JSON.stringify(data, null, 2));
+
+      const listData = Array.isArray(data)
+        ? data
+        : data.results || data.data || [];
+
+      // Filter: Yalnız seçilən ölkəyə aid olan şəhərləri saxla
+      const filteredList = listData.filter((item) => {
+        return item.country && item.country.id === selectedId;
+      });
+
+      const formattedCities = filteredList.map((item) => {
+        // Şəhər adı da obyekt ola bilər
+        const cityName =
+          typeof item.name === "object" && item.name !== null
+            ? item.name.en || Object.values(item.name)[0]
+            : item.name;
+
+        return {
+          label: cityName || "Unknown City",
+          value: item.id, // Və ya item.name, backend-in nə istədiyindən asılıdır
+        };
+      });
+      setCityOptions(formattedCities);
+    }
+  };
+
+  // --- Validasiya ---
   const validateForm = () => {
     const newErrors = {};
-
-    if (!email.trim()) newErrors.email = "Email tələb olunur";
+    if (!email.trim()) newErrors.email = "Email is required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-      newErrors.email = "Etibarlı email daxil edin";
-    if (!country) newErrors.country = "Ölkə seçilməlidir";
-    if (!city) newErrors.city = "Şəhər seçilməlidir";
-    if (!phoneNumber.trim())
-      newErrors.phoneNumber = "Telefon nömrəsi tələb olunur";
-    if (!agreed) newErrors.agreed = "Şərtləri qəbul etməlisiniz";
+      newErrors.email = "Invalid email format";
+
+    if (!country) newErrors.country = "Country is required";
+    if (!city) newErrors.city = "City is required";
+    if (!phoneNumber.trim()) newErrors.phoneNumber = "Phone number is required";
+    if (!agreed) newErrors.agreed = "You must agree to the terms";
 
     setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) {
+      console.log("⚠️ Validasiya xətaları:", newErrors);
+    }
+
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleContinue = () => {
-    if (!validateForm()) return;
+  // --- Submit (MODİFİKASİYA OLUNMUŞ) ---
+  const handleContinue = async () => {
+    console.log("🖱️ [3] Continue düyməsi basıldı");
 
+    if (!validateForm()) {
+      console.log("🛑 Validasiyadan keçmədi");
+      return;
+    }
+
+    // Dataları toplayırıq, amma hələ serverə göndərmirik
+    const formData = {
+      email: email,
+      country: country,
+      city: city,
+      phone_code: phoneCountryCode,
+      phone_number: phoneNumber,
+    };
+
+    console.log(
+      "🚀 [3] Data növbəti ekrana ötürülür:",
+      JSON.stringify(formData, null, 2),
+    );
+
+    // Serverə sorğu GÖNDƏRMƏDƏN birbaşa növbəti ekrana keçirik
     navigation.navigate("SignUpVerificationScreen", {
-      phoneNumber: `+${phoneCountryCode} ${phoneNumber}`,
-      email,
-      method: "phone",
+      formData: formData, // Bütün form datası buradadır
+      phoneNumber: `+${phoneCountryCode}${phoneNumber}`, // Göstərmək üçün
+      email: email,
+      type: "register",
       currentStep: 2,
       totalSteps: 6,
-      flow: "register",
     });
+
+    /* 
+       QEYD: Keçmiş kodda burada registerApi.request çağırılırdı. 
+       Onu sildik (və ya commentə aldıq) ki, avtomatik register olmasın.
+    */
   };
 
-  const handleCountryChange = (newCountry) => {
-    setCountry(newCountry);
-    setCity("");
-  };
+  const selectedCountryObj = countryOptions.find((c) => c.value === country);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -93,19 +224,35 @@ const SignUpFormScreen = ({ navigation }) => {
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
         >
-          <Text style={styles.title}>Become a Tripsify driver 🚗</Text>
-          <Text style={styles.subtitle}>
+          <Text style={[styles.title, { color: theme.textPrimary }]}>
+            Become a Tripsify driver 🚗
+          </Text>
+          <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
             To enhance your travel journey, we'd love to know more about you.
           </Text>
 
+          {/* Email Input */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
-            <View style={styles.inputWrapper}>
-              <EmailIcon style={styles.inputIcon} />
+            <Text style={[styles.label, { color: theme.textPrimary }]}>
+              Email
+            </Text>
+            <View
+              style={[
+                styles.inputWrapper,
+                { backgroundColor: theme.inputBg },
+                errors.email && { borderColor: theme.error, borderWidth: 1 },
+              ]}
+            >
+              <EmailIcon
+                width={20}
+                height={20}
+                fill={theme.textSecondary}
+                style={styles.inputIcon}
+              />
               <TextInput
-                style={[styles.input, errors.email && styles.inputError]}
+                style={[styles.input, { color: theme.textPrimary }]}
                 placeholder="Enter your e-mail address"
-                placeholderTextColor={colors.textLight}
+                placeholderTextColor={theme.textSecondary}
                 autoCapitalize="none"
                 keyboardType="email-address"
                 value={email}
@@ -113,28 +260,42 @@ const SignUpFormScreen = ({ navigation }) => {
               />
             </View>
             {errors.email && (
-              <Text style={styles.errorText}>{errors.email}</Text>
+              <Text style={[styles.errorText, { color: theme.error }]}>
+                {errors.email}
+              </Text>
             )}
           </View>
 
+          {/* Country Select */}
           <Select
+          searchable="true"
             label="Country of Residence"
             value={country}
             options={countryOptions}
             onSelect={handleCountryChange}
-            placeholder="Select country"
-            icon={selectedCountry?.flag}
+            placeholder={
+              countriesApi.loading ? "Loading countries..." : "Select country"
+            }
+            icon={selectedCountryObj?.icon}
             error={errors.country}
+            
           />
+
+          {/* City Select */}
           <Select
+          searchable="true"
             label="City of Residence"
             value={city}
             options={cityOptions}
             onSelect={setCity}
-            placeholder="Select city"
+            placeholder={
+              citiesApi.loading ? "Loading cities..." : "Select city"
+            }
             error={errors.city}
+            disabled={!country || citiesApi.loading}
           />
 
+          {/* Phone Input */}
           <PhoneInput
             label="Phone Number"
             value={phoneNumber}
@@ -144,44 +305,61 @@ const SignUpFormScreen = ({ navigation }) => {
             error={errors.phoneNumber}
           />
 
+          {/* Checkbox */}
           <View style={styles.checkboxContainer}>
             <TouchableOpacity
-              style={[styles.checkbox, agreed && styles.checkboxChecked]}
+              style={[
+                styles.checkbox,
+                { borderColor: theme.border },
+                agreed && {
+                  backgroundColor: theme.primary,
+                  borderColor: theme.primary,
+                },
+              ]}
               onPress={() => setAgreed(!agreed)}
             >
-              {agreed && <Text style={styles.checkmark}>✓</Text>}
+              {agreed && (
+                <Text style={[styles.checkmark, { color: "#FFFFFF" }]}>✓</Text>
+              )}
             </TouchableOpacity>
-            <Text style={styles.checkboxText}>
+
+            <Text style={[styles.checkboxText, { color: theme.textPrimary }]}>
               By registering, you agree to the{" "}
               <Text
-                style={styles.link}
+                style={[styles.link, { color: theme.primary }]}
                 onPress={() => navigation.navigate("TermsOfService")}
               >
                 Terms of Service
               </Text>{" "}
               and{" "}
               <Text
-                style={styles.link}
+                style={[styles.link, { color: theme.primary }]}
                 onPress={() => navigation.navigate("PrivacyPolicy")}
               >
                 Privacy Policy
               </Text>
               , commit to complying with the obligations arising from EU and
-              local legislation, and undertake to provide only lawful services
-              and content on the Tripsify platform.
+              local legislation.
             </Text>
           </View>
           {errors.agreed && (
-            <Text style={styles.errorText}>{errors.agreed}</Text>
+            <Text style={[styles.errorText, { color: theme.error }]}>
+              {errors.agreed}
+            </Text>
           )}
         </ScrollView>
 
-        <View style={styles.bottomSection}>
+        {/* Bottom Button */}
+        <View style={[styles.bottomSection, { borderTopColor: theme.border }]}>
           <TouchableOpacity
-            style={styles.continueButton}
+            style={[styles.continueButton, { backgroundColor: theme.primary }]}
             onPress={handleContinue}
+            disabled={registerApi.loading} // Loading state artıq vacib deyil amma qala bilər
           >
-            <Text style={styles.continueButtonText}>Continue</Text>
+            {/* Loading göstəricisini dəyişdirməyə ehtiyac yoxdur, çünki registerApi.loading false olacaq */}
+            <Text style={[styles.continueButtonText, { color: "#FFFFFF" }]}>
+              Continue
+            </Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -204,23 +382,20 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fontFamily.bold,
     fontSize: 24,
-    color: colors.text,
     marginTop: spacing.medium,
   },
   subtitle: {
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: colors.text,
     lineHeight: 22.4,
     letterSpacing: 0.2,
   },
   inputContainer: {
-    marginBottom: spacing.large,
+    // handled by gap
   },
   label: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: colors.text,
     marginBottom: spacing.small,
   },
   inputWrapper: {
@@ -229,7 +404,6 @@ const styles = StyleSheet.create({
     height: 55,
     paddingHorizontal: 20,
     borderRadius: 8,
-    backgroundColor: "#F2F2F2",
   },
   inputIcon: {
     marginRight: spacing.small,
@@ -238,15 +412,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fontFamily.regular,
     fontSize: 16,
-    color: colors.text,
-  },
-  inputError: {
-    borderColor: colors.error,
   },
   errorText: {
     fontFamily: fontFamily.regular,
     fontSize: 11,
-    color: colors.error,
     marginTop: 4,
   },
   checkboxContainer: {
@@ -261,49 +430,38 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: colors.border,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 4,
   },
-  checkboxChecked: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
   checkmark: {
     fontFamily: fontFamily.bold,
-    color: colors.white,
     fontSize: 12,
   },
   checkboxText: {
     flex: 1,
     fontFamily: fontFamily.regular,
-    fontSize: 16,
-    color: "#000000",
-    lineHeight: 25.6,
+    fontSize: 13,
+    lineHeight: 20,
   },
   link: {
     fontFamily: fontFamily.semiBold,
-    color: colors.primary,
     textDecorationLine: "underline",
   },
   bottomSection: {
     paddingHorizontal: spacing.horizontal,
     paddingVertical: spacing.large,
     borderTopWidth: 1,
-    borderTopColor: "#F0F0F0",
   },
   continueButton: {
     height: 55,
     borderRadius: 25,
-    backgroundColor: colors.primary,
     justifyContent: "center",
     alignItems: "center",
   },
   continueButtonText: {
     fontFamily: fontFamily.semiBold,
     fontSize: 16,
-    color: colors.white,
   },
 });
 
